@@ -1,7 +1,94 @@
-# LUMI — Apprends à ta façon. Avance à ton rythme.
+# LUMI – Apprends à ta façon. Avance à ton rythme.
 
-> Application éducative adaptée aux enfants avec TDAH, dyslexie et dyscalculie.  
-> Conçue pour rendre l'enfant autonome, organisé et confiant face au numérique.
+> Application éducative complète pour enfants de 8–12 ans avec TDAH, dyslexie et dyscalculie.  
+> Parcours guidé en 13 séances + 3 bilans + projet final — Next.js 14 · Supabase · Vercel
+
+---
+
+## 🚀 Déploiement rapide
+
+### 1. Installer les dépendances
+
+```bash
+npm install
+```
+
+### 2. Configurer Supabase
+
+Créez un projet sur [supabase.com](https://supabase.com), puis exécutez dans l'éditeur SQL :
+
+```
+supabase/schema.sql    ← Tables
+supabase/rls.sql       ← Sécurité par rôle
+supabase/triggers.sql  ← Automatisation
+supabase/seed.sql      ← Contenu pédagogique
+```
+
+### 3. Variables d'environnement
+
+Copiez `.env.local.example` → `.env.local` :
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://votre-projet.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=votre-clé-anon
+SUPABASE_SERVICE_ROLE_KEY=votre-clé-service
+```
+
+### 4. Comptes de test
+
+Créez dans Supabase → Authentication → Users :
+
+| Email | Mot de passe | Rôle |
+|-------|-------------|------|
+| `eleve@lumi.app` | `Lumi2024!` | student |
+| `parent@lumi.app` | `Lumi2024!` | parent |
+| `annelisecaillet05@gmail.com` | `Lumi2024!` | teacher |
+| `admin@lumi.app` | `Lumi2024!` | admin |
+
+Utilisez l'espace Admin (`/admin → Liens`) pour lier parent ↔ élève et prof ↔ élève.
+
+### 5. Lancer
+
+```bash
+npm run dev        # http://localhost:3000
+```
+
+### 6. Déployer sur Vercel
+
+```bash
+vercel --prod
+```
+
+Ajoutez les 3 variables d'environnement dans Vercel → Settings → Environment Variables.
+
+---
+
+## 🗂️ Structure
+
+```
+src/app/eleve/          Dashboard élève, parcours, séances, projet
+src/app/parent/         Tableau de bord parent
+src/app/professeur/     Suivi élèves, notes pédagogiques
+src/app/admin/          Gestion utilisateurs et liens
+src/components/activities/  Quiz, Typing, DragDrop, Flashcard, Emotion…
+src/components/layout/  StudentLayout, AppLayout, RoleGuard
+supabase/               schema.sql, rls.sql, triggers.sql, seed.sql
+```
+
+---
+
+## 🎓 Parcours pédagogique
+
+**Bloc 1** – Ordinateur & Productivité (Séances 0–4 + Bilan 1)  
+**Bloc 2** – IA & Esprit critique (Séances 5–8 + Bilan 2)  
+**Bloc 3** – Logique & Autonomie (Séances 9–12 + Bilan 3)  
+**Projet final** – Mon assistant d'aide aux devoirs (4 étapes guidées)
+
+---
+
+## ♿ Accessibilité
+
+Mode dyslexie · Grands boutons · Feedback positif · Sans timer agressif · Contraste doux
 
 ---
 
