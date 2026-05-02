@@ -568,7 +568,7 @@ from pf, (values
    2, 30),
   ('Étape 3 – Ma maquette', 'project_step', 15,
    'Conçois l''interface de ton assistant.',
-   '{"step":3,"title":"À quoi ressemble mon assistant ?","mockup_elements":{"title":{"label":"Titre de mon assistant","placeholder":"Mon super assistant de devoirs"},{"buttons":["J''ai une question","Je veux réviser","Je veux m''organiser","Je vérifie ma réponse"],"description_area":"Zone où mon assistant répond"},"customization":["Choisir une couleur principale","Choisir un emoji pour mon assistant","Choisir un nom pour mon assistant"]},"instruction":"Personnalise ton assistant comme tu le veux !"}',
+   '{"step":3,"title":"À quoi ressemble mon assistant ?","mockup_elements":{"title":{"label":"Titre de mon assistant","placeholder":"Mon super assistant de devoirs"},"buttons":["J''ai une question","Je veux réviser","Je veux m''organiser","Je vérifie ma réponse"],"description_area":"Zone où mon assistant répond","customization":["Choisir une couleur principale","Choisir un emoji pour mon assistant","Choisir un nom pour mon assistant"]},"instruction":"Personnalise ton assistant comme tu le veux !"}',
    3, 40),
   ('Étape 4 – Ma présentation', 'project_step', 15,
    'Présente ton assistant à ton professeur et à tes parents.',
