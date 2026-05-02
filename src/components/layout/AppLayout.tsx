@@ -20,6 +20,7 @@ const defaultNavItems = {
   ],
   teacher: [
     { href: '/professeur', label: 'Mes élèves', icon: Users },
+    { href: '/professeur/programme', label: 'Programme', icon: BookOpen },
   ],
   admin: [
     { href: '/admin', label: 'Administration', icon: Settings },
