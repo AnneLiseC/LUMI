@@ -131,7 +131,7 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     const best = content.best as string | undefined
     return (
       <div className="space-y-2">
-        {content.prompt && (
+        {(content.prompt as string | undefined) && (
           <div className="bg-lumi-blue-light rounded-xl p-2 text-sm">
             <span className="font-bold">Prompt : </span>"{content.prompt as string}"
           </div>
