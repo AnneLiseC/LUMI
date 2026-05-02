@@ -58,7 +58,7 @@ export default function HomePage() {
 
         {/* Trust badges */}
         <div className="flex flex-wrap gap-3 justify-center text-sm">
-          {['✅ Adapté TDAH & Dys', '🔒 Sécurisé', '👨‍🏫 Suivi professeur', '👨‍👩‍👧 Espace parent'].map(tag => (
+          {['🔒 Sécurisé', '👨‍🏫 Suivi professeur', '👨‍👩‍👧 Espace parent'].map(tag => (
             <span key={tag} className="px-3 py-1.5 bg-white rounded-xl font-semibold text-lumi-muted border border-gray-100 shadow-sm">
               {tag}
             </span>
