@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { LogOut, Users, BookOpen, BarChart3, Settings, GraduationCap, Menu, X } from 'lucide-react'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -32,13 +33,26 @@ const defaultNavItems = {
 const roleColors = {
   parent: 'bg-lumi-green',
   teacher: 'bg-lumi-purple',
-  admin: 'bg-red-400',
+  admin: 'bg-red-500',
 }
 
 const roleLabels = {
   parent: 'Espace Parent',
   teacher: 'Espace Professeur',
   admin: 'Administration',
+}
+
+function LumiLogo() {
+  return (
+    <div className="flex items-center gap-2.5">
+      <div className="w-9 h-9 rounded-xl lumi-logo-gradient flex items-center justify-center shadow-lg animate-logo-glow flex-shrink-0">
+        <span className="text-white font-black text-xl">L</span>
+      </div>
+      <span className="font-black text-xl bg-gradient-to-r from-lumi-purple via-lumi-blue to-cyan-500 bg-clip-text text-transparent">
+        LUMI
+      </span>
+    </div>
+  )
 }
 
 export function AppLayout({ children, role, userName, navItems }: AppLayoutProps) {
@@ -56,7 +70,7 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
   const closeSidebar = () => setSidebarOpen(false)
 
   return (
-    <div className="min-h-screen bg-lumi-cream">
+    <div className="min-h-screen bg-lumi-cream dark:bg-gray-950">
       {/* Mobile header */}
       <header className={cn('md:hidden sticky top-0 z-40 text-white shadow-sm', roleColors[role])}>
         <div className="flex items-center gap-3 px-4 py-3">
@@ -67,8 +81,9 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
           >
             <Menu className="w-5 h-5" />
           </button>
-          <div className="font-black text-xl">LUMI</div>
-          <div className="text-sm opacity-90 font-semibold truncate">{roleLabels[role]}</div>
+          <LumiLogo />
+          <div className="text-sm opacity-90 font-semibold truncate flex-1">{roleLabels[role]}</div>
+          <ThemeToggle />
         </div>
       </header>
 
@@ -85,7 +100,7 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
         {/* Sidebar */}
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-100 flex flex-col shadow-sm',
+            'fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 flex flex-col shadow-sm',
             'transition-transform duration-300',
             'md:static md:sticky md:top-0 md:h-screen md:flex-shrink-0 md:translate-x-0 md:z-auto md:transition-none',
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -93,19 +108,22 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
         >
           <div className={cn('p-5 text-white flex items-center justify-between', roleColors[role])}>
             <div>
-              <div className="font-black text-2xl">LUMI</div>
-              <div className="text-sm opacity-90 font-semibold">{roleLabels[role]}</div>
+              <LumiLogo />
+              <div className="text-sm opacity-90 font-semibold mt-1">{roleLabels[role]}</div>
               {userName && (
                 <div className="text-xs opacity-75 mt-1">Bonjour, {userName} !</div>
               )}
             </div>
-            <button
-              onClick={closeSidebar}
-              className="md:hidden p-1.5 rounded-xl bg-white/20 hover:bg-white/30 transition-colors"
-              aria-label="Fermer le menu"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <ThemeToggle className="hidden md:flex" />
+              <button
+                onClick={closeSidebar}
+                className="md:hidden p-1.5 rounded-xl bg-white/20 hover:bg-white/30 transition-colors"
+                aria-label="Fermer le menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -120,8 +138,8 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
                   className={cn(
                     'flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition-all text-sm',
                     active
-                      ? 'bg-lumi-blue-light text-lumi-blue'
-                      : 'text-lumi-muted hover:bg-gray-50 hover:text-lumi-text'
+                      ? 'bg-lumi-blue-light text-lumi-blue dark:bg-blue-950 dark:text-blue-400'
+                      : 'text-lumi-muted hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-lumi-text'
                   )}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
@@ -131,7 +149,7 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
             })}
           </nav>
 
-          <div className="p-4 border-t border-gray-100">
+          <div className="p-4 border-t border-gray-100 dark:border-gray-800">
             <button
               onClick={signOut}
               className="flex items-center gap-3 px-4 py-3 rounded-2xl text-lumi-muted hover:bg-red-50 hover:text-red-500 transition-all text-sm font-semibold w-full"
