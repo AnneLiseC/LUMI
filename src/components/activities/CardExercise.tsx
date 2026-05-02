@@ -34,7 +34,7 @@ export function CardExercise({ content, xpReward, onComplete }: CardExerciseProp
   const [seen, setSeen] = useState<Set<number>>(new Set())
   const [finished, setFinished] = useState(false)
 
-  const markSeen = (i: number) => setSeen(prev => new Set([...prev, i]))
+  const markSeen = (i: number) => setSeen(prev => new Set(prev).add(i))
 
   const handleNext = () => {
     markSeen(currentIndex)
