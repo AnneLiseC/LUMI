@@ -55,15 +55,6 @@ export default function HomePage() {
             </Button>
           </Link>
         </div>
-
-        {/* Trust badges */}
-        <div className="flex flex-wrap gap-3 justify-center text-sm">
-          {['🔒 Sécurisé', '👨‍🏫 Suivi professeur', '👨‍👩‍👧 Espace parent'].map(tag => (
-            <span key={tag} className="px-3 py-1.5 bg-white rounded-xl font-semibold text-lumi-muted border border-gray-100 shadow-sm">
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
     </main>
   )
