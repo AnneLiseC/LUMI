@@ -13,11 +13,13 @@ begin
   insert into profiles (id, role, first_name, last_name)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data->>'role', 'student'),
+    coalesce(nullif(new.raw_user_meta_data->>'role', ''), 'student'),
     coalesce(new.raw_user_meta_data->>'first_name', ''),
     coalesce(new.raw_user_meta_data->>'last_name', '')
   )
-  on conflict (id) do nothing;
+  on conflict (id) do update
+    set role = excluded.role
+    where profiles.role = 'student' and excluded.role != 'student';
 
   -- Si c'est un élève, créer aussi l'entrée students
   if coalesce(new.raw_user_meta_data->>'role', 'student') = 'student' then
