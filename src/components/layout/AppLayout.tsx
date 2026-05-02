@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { LogOut, Users, BookOpen, BarChart3, Settings } from 'lucide-react'
+import { LogOut, Users, BookOpen, BarChart3, Settings, GraduationCap } from 'lucide-react'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -17,6 +17,7 @@ interface AppLayoutProps {
 const defaultNavItems = {
   parent: [
     { href: '/parent', label: 'Tableau de bord', icon: BarChart3 },
+    { href: '/parent/programme', label: 'Programme', icon: GraduationCap },
   ],
   teacher: [
     { href: '/professeur', label: 'Mes élèves', icon: Users },
