@@ -123,15 +123,15 @@ export default function EleveDetailPage() {
           </button>
 
           {/* Header */}
-          <div className="bg-gradient-to-r from-lumi-purple-light to-lumi-blue-light rounded-3xl p-6">
+          <div className="bg-gradient-to-r from-lumi-purple-light to-lumi-blue-light rounded-3xl p-5 sm:p-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-lumi-purple flex items-center justify-center text-3xl">🧒</div>
-              <div className="flex-1">
-                <h1 className="text-2xl font-black text-lumi-text">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-lumi-purple flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0">🧒</div>
+              <div className="flex-1 min-w-0">
+                <h1 className="text-xl sm:text-2xl font-black text-lumi-text">
                   {profile?.first_name} {profile?.last_name}
                 </h1>
-                <p className="text-lumi-muted">Niveau {level.level} — {level.name}</p>
-                <div className="flex gap-4 mt-1 text-sm text-lumi-muted">
+                <p className="text-lumi-muted text-sm">Niveau {level.level} — {level.name}</p>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs sm:text-sm text-lumi-muted">
                   <span>✅ {completedActivities} activités</span>
                   <span>🏅 {badges.length} badges</span>
                   <span>⚡ {student.xp} XP</span>

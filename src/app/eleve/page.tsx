@@ -11,6 +11,15 @@ import { useStudentData } from '@/hooks/useStudentData'
 import Link from 'next/link'
 import { getLevelForXp } from '@/types'
 import type { Student, Profile, Badge, StudentBadge } from '@/types'
+import { motion } from 'framer-motion'
+
+const stagger = {
+  container: { animate: { transition: { staggerChildren: 0.1 } } },
+  item: {
+    initial: { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  },
+}
 
 export default function EleveDashboard() {
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -69,15 +78,20 @@ export default function EleveDashboard() {
   return (
     <RoleGuard allowedRoles={['student']}>
       <StudentLayout student={student ?? undefined}>
-        <div className="space-y-6">
+        <motion.div
+          className="space-y-6"
+          variants={stagger.container}
+          initial="initial"
+          animate="animate"
+        >
           {/* Welcome */}
-          <div className="bg-gradient-to-r from-lumi-blue to-lumi-purple rounded-3xl p-6 text-white">
+          <motion.div variants={stagger.item} className="bg-gradient-to-r from-lumi-blue to-lumi-purple rounded-3xl p-6 text-white">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl">
                 ⭐
               </div>
               <div>
-                <h1 className="text-2xl font-black">
+                <h1 className="text-xl sm:text-2xl font-black">
                   Bonjour, {profile?.first_name || 'Champion'} ! 👋
                 </h1>
                 <p className="opacity-90 font-semibold">
@@ -91,10 +105,10 @@ export default function EleveDashboard() {
             <div className="mt-5">
               <XPBar xp={xp} className="[&>div]:bg-white/20 [&_*]:!text-white [&_.bg-gradient-to-r]:opacity-80" />
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <motion.div variants={stagger.item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link href="/eleve/parcours"
               className="bg-lumi-blue-light border-2 border-lumi-blue rounded-3xl p-5 text-center hover:shadow-md hover:-translate-y-1 transition-all group"
             >
@@ -116,9 +130,10 @@ export default function EleveDashboard() {
               <div className="font-black text-yellow-700 text-lg">{xp} XP</div>
               <div className="text-sm text-lumi-muted mt-1">Points d'expérience</div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Badges */}
+          <motion.div variants={stagger.item}>
           <Card>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-black text-lumi-text">Mes badges</h2>
@@ -137,8 +152,10 @@ export default function EleveDashboard() {
               ))}
             </div>
           </Card>
+          </motion.div>
 
           {/* Stats */}
+          <motion.div variants={stagger.item}>
           <Card>
             <h2 className="text-xl font-black text-lumi-text mb-4">Mes statistiques</h2>
             <div className="grid grid-cols-3 gap-4">
@@ -156,7 +173,8 @@ export default function EleveDashboard() {
               </div>
             </div>
           </Card>
-        </div>
+          </motion.div>
+        </motion.div>
       </StudentLayout>
     </RoleGuard>
   )

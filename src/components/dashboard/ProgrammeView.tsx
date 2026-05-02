@@ -89,7 +89,7 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-black text-lumi-text">Programme complet 📚</h1>
+          <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">Programme complet 📚</h1>
           <p className="text-lumi-muted mt-1">
             {sessions.length} séances · {totalActivities} activités · {formatDuration(totalMinutes)} au total
           </p>
@@ -117,14 +117,14 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
 
         return (
           <div key={blockName} className="space-y-3">
-            <div className="flex items-center gap-3">
-              <span className={cn('px-3 py-1.5 rounded-xl text-sm font-black', colors.badge)}>
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className={cn('px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black', colors.badge)}>
                 {blockName}
               </span>
-              <span className="text-sm text-lumi-muted">
+              <span className="text-xs sm:text-sm text-lumi-muted">
                 {blockSessions.length} séances · {formatDuration(blockMinutes)}
               </span>
-              <div className="h-px flex-1 bg-gray-200" />
+              <div className="h-px flex-1 bg-gray-200 hidden sm:block" />
             </div>
 
             <div className="space-y-2">
@@ -158,12 +158,12 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
                         <p className="text-sm text-lumi-muted mt-0.5 line-clamp-1">{session.objective}</p>
                       </div>
 
-                      <div className="flex items-center gap-3 flex-shrink-0 text-sm text-lumi-muted">
+                      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 text-sm text-lumi-muted">
                         <span className="flex items-center gap-1">
                           <Clock className="w-3.5 h-3.5" />
                           {formatDuration(session.estimated_duration_minutes)}
                         </span>
-                        <span>{activities.length} activités</span>
+                        <span className="hidden sm:inline">{activities.length} activités</span>
                         {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                       </div>
                     </button>

@@ -82,31 +82,31 @@ export default function ProfesseurDashboard() {
       <AppLayout role="teacher" userName={profile?.first_name}>
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-black text-lumi-text">Mes élèves 👨‍🏫</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">Mes élèves 👨‍🏫</h1>
             <p className="text-lumi-muted mt-1">
               {students.length} élève{students.length > 1 ? 's' : ''} suivi{students.length > 1 ? 's' : ''}
             </p>
           </div>
 
           {/* Summary stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3">
             <Card padding="sm">
               <div className="text-center">
-                <div className="text-2xl font-black text-lumi-purple">{students.length}</div>
+                <div className="text-xl sm:text-2xl font-black text-lumi-purple">{students.length}</div>
                 <div className="text-xs text-lumi-muted">Élèves</div>
               </div>
             </Card>
             <Card padding="sm">
               <div className="text-center">
-                <div className="text-2xl font-black text-lumi-blue">
+                <div className="text-xl sm:text-2xl font-black text-lumi-blue">
                   {students.reduce((sum, s) => sum + s.completed_count, 0)}
                 </div>
-                <div className="text-xs text-lumi-muted">Activités complétées</div>
+                <div className="text-xs text-lumi-muted leading-tight">Activités<br className="sm:hidden" /> complétées</div>
               </div>
             </Card>
             <Card padding="sm">
               <div className="text-center">
-                <div className="text-2xl font-black text-lumi-green">
+                <div className="text-xl sm:text-2xl font-black text-lumi-green">
                   {students.reduce((sum, s) => sum + s.xp, 0)}
                 </div>
                 <div className="text-xs text-lumi-muted">XP total</div>

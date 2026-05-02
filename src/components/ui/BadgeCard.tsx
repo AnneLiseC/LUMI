@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import type { Badge } from '@/types'
+import { motion } from 'framer-motion'
 
 interface BadgeCardProps {
   badge: Badge
@@ -19,14 +20,17 @@ export function BadgeCard({ badge, unlocked = false, unlockedAt, size = 'md' }: 
   const s = sizes[size]
 
   return (
-    <div
+    <motion.div
       className={cn(
         'flex flex-col items-center text-center rounded-2xl border-2 transition-all duration-300',
         s.card,
         unlocked
-          ? 'bg-white border-lumi-yellow shadow-md hover:shadow-lg hover:-translate-y-1'
+          ? 'bg-white border-lumi-yellow shadow-md cursor-pointer'
           : 'bg-gray-50 border-gray-200 opacity-50 grayscale'
       )}
+      whileHover={unlocked ? { scale: 1.08, y: -4 } : undefined}
+      whileTap={unlocked ? { scale: 0.95 } : undefined}
+      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
     >
       <div className={cn(s.icon, !unlocked && 'opacity-40')}>{badge.icon}</div>
       <div className={cn('font-bold text-lumi-text', s.name)}>{badge.name}</div>
@@ -38,6 +42,6 @@ export function BadgeCard({ badge, unlocked = false, unlockedAt, size = 'md' }: 
           ✓ Débloqué !
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
