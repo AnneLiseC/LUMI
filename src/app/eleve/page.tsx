@@ -77,7 +77,7 @@ export default function EleveDashboard() {
                 ⭐
               </div>
               <div>
-                <h1 className="text-2xl font-black">
+                <h1 className="text-xl sm:text-2xl font-black">
                   Bonjour, {profile?.first_name || 'Champion'} ! 👋
                 </h1>
                 <p className="opacity-90 font-semibold">

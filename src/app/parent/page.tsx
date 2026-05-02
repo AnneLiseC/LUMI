@@ -88,7 +88,7 @@ export default function ParentDashboard() {
       <AppLayout role="parent" userName={profile?.first_name}>
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-black text-lumi-text">
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">
               Bonjour, {profile?.first_name} ! 👋
             </h1>
             <p className="text-lumi-muted mt-1">

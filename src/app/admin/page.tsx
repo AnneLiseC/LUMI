@@ -97,7 +97,7 @@ export default function AdminPage() {
       <AppLayout role="admin">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-black text-lumi-text">Administration ⚙️</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">Administration ⚙️</h1>
             <p className="text-lumi-muted mt-1">Gestion complète de la plateforme LUMI.</p>
           </div>
 
@@ -120,7 +120,7 @@ export default function AdminPage() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2 border-b border-gray-200">
+          <div className="flex gap-2 border-b border-gray-200 overflow-x-auto scrollbar-none">
             {tabs.map(tab => {
               const Icon = tab.icon
               return (
@@ -128,7 +128,7 @@ export default function AdminPage() {
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
                   className={cn(
-                    'flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all -mb-px',
+                    'flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all -mb-px whitespace-nowrap flex-shrink-0',
                     activeTab === tab.key
                       ? 'border-red-400 text-red-500'
                       : 'border-transparent text-lumi-muted hover:text-lumi-text'

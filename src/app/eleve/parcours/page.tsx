@@ -80,7 +80,7 @@ export default function ParcoursPage() {
       <StudentLayout student={student ?? undefined}>
         <div className="space-y-8">
           <div>
-            <h1 className="text-3xl font-black text-lumi-text">Mon parcours 🗺️</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">Mon parcours 🗺️</h1>
             <p className="text-lumi-muted mt-1">Suis les séances dans l'ordre pour progresser !</p>
           </div>
 
