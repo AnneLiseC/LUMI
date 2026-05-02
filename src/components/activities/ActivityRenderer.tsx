@@ -107,7 +107,7 @@ function ComparisonExercise({ content, xpReward, onComplete }: { content: Record
 
   return (
     <div className="space-y-4">
-      {content.prompt && (
+      {(content.prompt as string | undefined) && (
         <div className="bg-lumi-blue-light rounded-2xl p-4">
           <p className="font-bold text-lumi-text text-sm">Question posée à l'IA :</p>
           <p className="text-base mt-1 italic">"{content.prompt as string}"</p>
