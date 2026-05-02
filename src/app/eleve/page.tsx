@@ -10,6 +10,8 @@ import { Card } from '@/components/ui/Card'
 import { useStudentData } from '@/hooks/useStudentData'
 import Link from 'next/link'
 import { getLevelForXp } from '@/types'
+import { motion } from 'framer-motion'
+import { stagger } from '@/components/ui/PageWrapper'
 import type { Student, Profile, Badge, StudentBadge } from '@/types'
 
 export default function EleveDashboard() {
@@ -23,15 +25,12 @@ export default function EleveDashboard() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-
       const [profileRes, badgesRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         supabase.from('badges').select('*').order('condition_value'),
       ])
-
       setProfile(profileRes.data)
       setAllBadges(badgesRes.data ?? [])
-
       if (profileRes.data?.role === 'student') {
         const { data: stu } = await supabase
           .from('students')
@@ -40,7 +39,6 @@ export default function EleveDashboard() {
           .single()
         setStudent(stu)
       }
-
       setLoading(false)
     }
     load()
@@ -51,10 +49,7 @@ export default function EleveDashboard() {
       <RoleGuard allowedRoles={['student']}>
         <StudentLayout>
           <div className="flex items-center justify-center h-64">
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 border-4 border-lumi-blue border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-lumi-muted font-semibold">Chargement…</p>
-            </div>
+            <div className="w-12 h-12 border-4 border-lumi-purple border-t-transparent rounded-full animate-spin" />
           </div>
         </StudentLayout>
       </RoleGuard>
@@ -69,94 +64,134 @@ export default function EleveDashboard() {
   return (
     <RoleGuard allowedRoles={['student']}>
       <StudentLayout student={student ?? undefined}>
-        <div className="space-y-6">
-          {/* Welcome */}
-          <div className="bg-gradient-to-r from-lumi-blue to-lumi-purple rounded-3xl p-6 text-white">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl">
-                ⭐
-              </div>
-              <div>
-                <h1 className="text-2xl font-black">
-                  Bonjour, {profile?.first_name || 'Champion'} ! 👋
-                </h1>
-                <p className="opacity-90 font-semibold">
-                  Niveau {level.level} — {level.name}
-                </p>
-                <p className="opacity-75 text-sm mt-0.5">
-                  Continue comme ça, tu avances !
-                </p>
+        <motion.div
+          variants={stagger.container}
+          initial="hidden"
+          animate="show"
+          className="space-y-5"
+        >
+          {/* Welcome hero */}
+          <motion.div variants={stagger.item}>
+            <div className="relative rounded-3xl p-6 overflow-hidden text-white"
+              style={{ background: 'linear-gradient(135deg, #A78BFA 0%, #6C9FFF 50%, #22D3EE 100%)' }}>
+              <div className="absolute inset-0 bg-black/5" />
+              {/* Decorative blobs */}
+              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 blur-xl" />
+              <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-white/10 blur-xl" />
+              <div className="relative flex items-start gap-4">
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-4xl flex-shrink-0"
+                >
+                  ⭐
+                </motion.div>
+                <div className="flex-1">
+                  <h1 className="text-2xl font-black tracking-tight">
+                    Bonjour, {profile?.first_name || 'Champion'} ! 👋
+                  </h1>
+                  <p className="opacity-90 font-semibold text-sm mt-0.5">
+                    Niveau {level.level} — {level.name}
+                  </p>
+                  <div className="mt-4">
+                    <XPBar xp={xp} className="[&>div:first-child]:text-white [&>span]:text-white/80" />
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="mt-5">
-              <XPBar xp={xp} className="[&>div]:bg-white/20 [&_*]:!text-white [&_.bg-gradient-to-r]:opacity-80" />
-            </div>
-          </div>
+          </motion.div>
 
           {/* Quick actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link href="/eleve/parcours"
-              className="bg-lumi-blue-light border-2 border-lumi-blue rounded-3xl p-5 text-center hover:shadow-md hover:-translate-y-1 transition-all group"
-            >
-              <div className="text-4xl mb-2 group-hover:animate-bounce">🗺️</div>
-              <div className="font-black text-lumi-blue text-lg">Mon parcours</div>
-              <div className="text-sm text-lumi-muted mt-1">Voir toutes les séances</div>
-            </Link>
-
-            <Link href="/eleve/projet"
-              className="bg-lumi-purple-light border-2 border-lumi-purple rounded-3xl p-5 text-center hover:shadow-md hover:-translate-y-1 transition-all group"
-            >
-              <div className="text-4xl mb-2 group-hover:animate-bounce">🏆</div>
-              <div className="font-black text-lumi-purple text-lg">Mon projet</div>
-              <div className="text-sm text-lumi-muted mt-1">Assistant de devoirs</div>
-            </Link>
-
-            <div className="bg-lumi-yellow-light border-2 border-lumi-yellow rounded-3xl p-5 text-center">
-              <div className="text-4xl mb-2">⭐</div>
-              <div className="font-black text-yellow-700 text-lg">{xp} XP</div>
-              <div className="text-sm text-lumi-muted mt-1">Points d'expérience</div>
-            </div>
-          </div>
+          <motion.div variants={stagger.item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              {
+                href: '/eleve/parcours', emoji: '🗺️', label: 'Mon parcours',
+                sub: 'Voir toutes les séances',
+                gradient: 'from-lumi-blue/15 to-lumi-blue/5',
+                border: 'border-lumi-blue/30 hover:border-lumi-blue',
+                text: 'text-lumi-blue',
+              },
+              {
+                href: '/eleve/projet', emoji: '🏆', label: 'Mon projet',
+                sub: 'Assistant de devoirs',
+                gradient: 'from-lumi-purple/15 to-lumi-purple/5',
+                border: 'border-lumi-purple/30 hover:border-lumi-purple',
+                text: 'text-lumi-purple',
+              },
+              {
+                href: '#', emoji: '⭐', label: `${xp} XP`,
+                sub: 'Points gagnés',
+                gradient: 'from-lumi-yellow/20 to-lumi-yellow/5',
+                border: 'border-lumi-yellow/40 hover:border-lumi-yellow',
+                text: 'text-amber-600 dark:text-lumi-yellow',
+              },
+            ].map((item, i) => (
+              <motion.div key={item.label} whileHover={{ y: -6, scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
+                <Link
+                  href={item.href}
+                  className={`block bg-gradient-to-b ${item.gradient} border-2 ${item.border} rounded-3xl p-5 text-center transition-all`}
+                >
+                  <motion.div
+                    className="text-4xl mb-2"
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4 }}
+                  >
+                    {item.emoji}
+                  </motion.div>
+                  <div className={`font-black text-lg ${item.text}`}>{item.label}</div>
+                  <div className="text-sm text-lumi-muted dark:text-slate-400 mt-0.5">{item.sub}</div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
 
           {/* Badges */}
-          <Card>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-black text-lumi-text">Mes badges</h2>
-              <span className="text-sm text-lumi-muted font-semibold">
-                {unlockedBadgeIds.size} / {allBadges.length}
-              </span>
-            </div>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-              {allBadges.map(badge => (
-                <BadgeCard
-                  key={badge.id}
-                  badge={badge}
-                  unlocked={unlockedBadgeIds.has(badge.id)}
-                  size="sm"
-                />
-              ))}
-            </div>
-          </Card>
+          <motion.div variants={stagger.item}>
+            <Card>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-black text-lumi-text dark:text-slate-100">Mes badges 🏅</h2>
+                <span className="text-sm text-lumi-muted dark:text-slate-400 font-bold bg-lumi-purple-light dark:bg-lumi-purple/20 text-lumi-purple px-3 py-1 rounded-xl">
+                  {unlockedBadgeIds.size} / {allBadges.length}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                {allBadges.map(badge => (
+                  <BadgeCard key={badge.id} badge={badge} unlocked={unlockedBadgeIds.has(badge.id)} size="sm" />
+                ))}
+              </div>
+            </Card>
+          </motion.div>
 
           {/* Stats */}
-          <Card>
-            <h2 className="text-xl font-black text-lumi-text mb-4">Mes statistiques</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-3xl font-black text-lumi-blue">{student?.level ?? 1}</div>
-                <div className="text-xs text-lumi-muted font-semibold mt-1">Niveau</div>
+          <motion.div variants={stagger.item}>
+            <Card>
+              <h2 className="text-xl font-black text-lumi-text dark:text-slate-100 mb-4">Mes stats 📊</h2>
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { value: student?.level ?? 1, label: 'Niveau', color: 'text-lumi-blue' },
+                  { value: unlockedBadgeIds.size, label: 'Badges', color: 'text-lumi-green' },
+                  { value: xp, label: 'XP Total', color: 'text-lumi-purple' },
+                ].map(stat => (
+                  <motion.div
+                    key={stat.label}
+                    whileHover={{ scale: 1.05 }}
+                    className="text-center p-3 rounded-2xl bg-lumi-cream dark:bg-slate-800 border border-slate-100 dark:border-slate-700"
+                  >
+                    <motion.div
+                      className={`text-3xl font-black ${stat.color}`}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5, type: 'spring' }}
+                    >
+                      {stat.value}
+                    </motion.div>
+                    <div className="text-xs text-lumi-muted dark:text-slate-400 font-bold mt-1">{stat.label}</div>
+                  </motion.div>
+                ))}
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-black text-lumi-green">{unlockedBadgeIds.size}</div>
-                <div className="text-xs text-lumi-muted font-semibold mt-1">Badges</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-black text-lumi-purple">{xp}</div>
-                <div className="text-xs text-lumi-muted font-semibold mt-1">XP Total</div>
-              </div>
-            </div>
-          </Card>
-        </div>
+            </Card>
+          </motion.div>
+        </motion.div>
       </StudentLayout>
     </RoleGuard>
   )
