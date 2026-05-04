@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/Card'
 import { useStudentData } from '@/hooks/useStudentData'
 import Link from 'next/link'
 import { getLevelForXp } from '@/types'
-import type { Student, Profile, Badge, StudentBadge } from '@/types'
+import type { Student, Profile, Badge, StudentBadge, Assessment, StudentActivityProgress } from '@/types'
 import { motion } from 'framer-motion'
 
 const stagger = {
@@ -25,6 +25,8 @@ export default function EleveDashboard() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [student, setStudent] = useState<Student | null>(null)
   const [allBadges, setAllBadges] = useState<Badge[]>([])
+  const [latestAssessment, setLatestAssessment] = useState<Assessment | null>(null)
+  const [commentedProgress, setCommentedProgress] = useState<(StudentActivityProgress & { teacher_comment: string })[]>([])
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
@@ -48,6 +50,15 @@ export default function EleveDashboard() {
           .eq('profile_id', user.id)
           .single()
         setStudent(stu)
+
+        if (stu) {
+          const [assessRes, progRes] = await Promise.all([
+            supabase.from('assessments').select('*').eq('student_id', stu.id).order('created_at', { ascending: false }).limit(1),
+            supabase.from('student_activity_progress').select('id, activity_id, teacher_comment').eq('student_id', stu.id).not('teacher_comment', 'is', null),
+          ])
+          setLatestAssessment(assessRes.data?.[0] ?? null)
+          setCommentedProgress((progRes.data ?? []).filter(p => p.teacher_comment) as (StudentActivityProgress & { teacher_comment: string })[])
+        }
       }
 
       setLoading(false)
@@ -153,6 +164,38 @@ export default function EleveDashboard() {
             </div>
           </Card>
           </motion.div>
+
+          {/* Teacher feedback */}
+          {(latestAssessment || commentedProgress.length > 0) && (
+            <motion.div variants={stagger.item}>
+              <Card>
+                <h2 className="text-xl font-black text-lumi-text mb-4">📬 Retours de mon prof</h2>
+                <div className="space-y-3">
+                  {latestAssessment && (
+                    <div className="bg-lumi-purple-light rounded-2xl p-4 space-y-2">
+                      <p className="text-xs font-bold text-lumi-purple uppercase tracking-wide">Bilan pédagogique</p>
+                      <p className="text-sm font-semibold text-lumi-text">{latestAssessment.summary}</p>
+                      {latestAssessment.strengths && (
+                        <p className="text-xs text-lumi-text"><span className="font-bold text-lumi-green">✅ Points forts : </span>{latestAssessment.strengths}</p>
+                      )}
+                      {latestAssessment.difficulties && (
+                        <p className="text-xs text-lumi-text"><span className="font-bold text-orange-500">💪 À améliorer : </span>{latestAssessment.difficulties}</p>
+                      )}
+                      {latestAssessment.recommendations && (
+                        <p className="text-xs text-lumi-text"><span className="font-bold text-lumi-blue">💡 Conseil : </span>{latestAssessment.recommendations}</p>
+                      )}
+                    </div>
+                  )}
+                  {commentedProgress.map(p => (
+                    <div key={p.id} className="bg-lumi-blue-light rounded-2xl p-3 flex gap-3 items-start">
+                      <span className="text-xl flex-shrink-0">💬</span>
+                      <p className="text-sm text-lumi-text">{p.teacher_comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
+          )}
 
           {/* Stats */}
           <motion.div variants={stagger.item}>
