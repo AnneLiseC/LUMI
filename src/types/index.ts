@@ -55,6 +55,7 @@ export type ActivityType =
   | 'card'
   | 'map'
   | 'project_step'
+  | 'guided_search'
 
 export interface Activity {
   id: string
