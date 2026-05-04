@@ -50,7 +50,7 @@ export function ActivityRenderer({ activity, onComplete }: ActivityRendererProps
     case 'editor':
     case 'todo':
     case 'search':
-      return <ReflectionExercise content={content as never} xpReward={activity.xp_reward} onComplete={s => onComplete(s)} type={activity.type as 'reflection' | 'editor'} />
+      return <ReflectionExercise content={content as never} xpReward={activity.xp_reward} onComplete={(s, data) => onComplete(s, undefined, data)} type={activity.type as 'reflection' | 'editor'} />
 
     case 'emotion':
       return <EmotionExercise content={content as never} xpReward={activity.xp_reward} onComplete={s => onComplete(s)} />

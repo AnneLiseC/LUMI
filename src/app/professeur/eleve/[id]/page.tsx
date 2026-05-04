@@ -51,7 +51,7 @@ export default function EleveDetailPage() {
       setSessions(sessRes.data ?? [])
 
       const [progRes, badgesRes, notesRes, assessRes] = await Promise.all([
-        supabase.from('student_activity_progress').select('*').eq('student_id', id),
+        supabase.from('student_activity_progress').select('*, answer_data').eq('student_id', id),
         supabase.from('student_badges').select('*, badge:badges(*)').eq('student_id', id),
         supabase.from('teacher_notes').select('*').eq('student_id', id).eq('teacher_id', user.id).order('created_at', { ascending: false }),
         supabase.from('assessments').select('*').eq('student_id', id).order('created_at', { ascending: false }),
@@ -171,6 +171,50 @@ export default function EleveDetailPage() {
               })}
             </div>
           </Card>
+
+          {/* Student reflection answers */}
+          {(() => {
+            const reflectionAnswers = sessions.flatMap(session =>
+              (session.activities ?? [])
+                .filter((a: { id: string; type: string }) => a.type === 'reflection' || a.type === 'editor')
+                .map((a: { id: string; title: string; type: string }) => {
+                  const prog = progress.find(p => p.activity_id === a.id && p.status === 'completed')
+                  if (!prog?.answer_data) return null
+                  const answers = (prog.answer_data as { answers?: Record<string, { prompt: string; answer: string }> }).answers ?? {}
+                  return { sessionTitle: session.title, activityTitle: a.title, answers, completedAt: prog.completed_at }
+                })
+                .filter(Boolean)
+            )
+            if (reflectionAnswers.length === 0) return null
+            return (
+              <Card>
+                <h2 className="text-xl font-black text-lumi-text mb-4">✍️ Réponses écrites</h2>
+                <div className="space-y-4">
+                  {reflectionAnswers.map((item, idx) => item && (
+                    <div key={idx} className="border-2 border-lumi-purple-light rounded-2xl overflow-hidden">
+                      <div className="bg-lumi-purple-light px-4 py-2 flex justify-between items-center">
+                        <div>
+                          <span className="font-bold text-sm text-lumi-purple">{item.activityTitle}</span>
+                          <span className="text-xs text-lumi-muted ml-2">— {item.sessionTitle}</span>
+                        </div>
+                        {item.completedAt && (
+                          <span className="text-xs text-lumi-muted">{new Date(item.completedAt).toLocaleDateString('fr-FR')}</span>
+                        )}
+                      </div>
+                      <div className="p-4 space-y-3">
+                        {Object.values(item.answers).map((qa, i) => (
+                          <div key={i}>
+                            <p className="text-xs font-bold text-lumi-muted mb-1">{qa.prompt}</p>
+                            <p className="text-sm text-lumi-text bg-gray-50 rounded-xl px-3 py-2">{qa.answer}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )
+          })()}
 
           {/* Notes pédagogiques */}
           <Card>

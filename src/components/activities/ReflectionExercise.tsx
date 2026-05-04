@@ -13,7 +13,7 @@ interface ReflectionContent {
 interface ReflectionExerciseProps {
   content: ReflectionContent
   xpReward: number
-  onComplete: (score: number) => void
+  onComplete: (score: number, data?: Record<string, unknown>) => void
   type?: 'reflection' | 'editor'
 }
 
@@ -27,7 +27,9 @@ export function ReflectionExercise({ content, xpReward, onComplete, type = 'refl
 
   const handleSubmit = () => {
     setSubmitted(true)
-    onComplete(100)
+    const answerData: Record<string, unknown> = {}
+    prompts.forEach((prompt, i) => { answerData[`q${i}`] = { prompt, answer: answers[i] } })
+    onComplete(100, { answers: answerData })
   }
 
   if (submitted) {
