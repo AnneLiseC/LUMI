@@ -101,13 +101,12 @@ export default function SeancePage() {
       toast.success(`+${activity.xp_reward} XP ! ⚡`, { icon: '⭐' })
     }
 
-    // Reload progress
+    // Reload progress (stay on activity so student can read the result)
     const { data: newProg } = await supabase
       .from('student_activity_progress')
       .select('*')
       .eq('student_id', student.id)
     setProgress(newProg ?? [])
-    setShowActivity(false)
   }
 
   const handleNext = () => {

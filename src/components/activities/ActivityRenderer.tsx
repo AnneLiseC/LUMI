@@ -10,6 +10,7 @@ import { CardExercise } from './CardExercise'
 import { OrderExercise } from './OrderExercise'
 import { IntroExercise } from './IntroExercise'
 import { ProjectStepExercise } from './ProjectStepExercise'
+import { GuidedSearchExercise } from './GuidedSearchExercise'
 import { Button } from '@/components/ui/Button'
 import { useState } from 'react'
 
@@ -66,6 +67,9 @@ export function ActivityRenderer({ activity, onComplete }: ActivityRendererProps
 
     case 'project_step':
       return <ProjectStepExercise content={content as never} xpReward={activity.xp_reward} onComplete={handleProjectComplete} />
+
+    case 'guided_search':
+      return <GuidedSearchExercise content={content as never} xpReward={activity.xp_reward} onComplete={s => onComplete(s)} />
 
     default:
       return (
