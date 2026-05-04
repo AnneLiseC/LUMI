@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { LogOut, Users, BookOpen, BarChart3, Settings, GraduationCap, Menu, X } from 'lucide-react'
+import { LogOut, Users, BookOpen, BarChart3, Settings, GraduationCap, Menu, X, TrendingUp } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 interface AppLayoutProps {
@@ -24,6 +24,7 @@ const defaultNavItems = {
   teacher: [
     { href: '/professeur', label: 'Mes élèves', icon: Users },
     { href: '/professeur/programme', label: 'Programme', icon: BookOpen },
+    { href: '/professeur/statistiques', label: 'Statistiques', icon: TrendingUp },
   ],
   admin: [
     { href: '/admin', label: 'Administration', icon: Settings },
