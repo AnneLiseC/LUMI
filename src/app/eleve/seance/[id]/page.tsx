@@ -24,7 +24,7 @@ export default function SeancePage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showActivity, setShowActivity] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [allSessions, setAllSessions] = useState<Session[]>([])
+  const [allSessions, setAllSessions] = useState<{ id: string; activities: { id: string }[] }[]>([])
   const [allBadges, setAllBadges] = useState<{ id: string; condition_type: string; condition_value: number; name: string; icon: string }[]>([])
   const [earnedBadgeIds, setEarnedBadgeIds] = useState<Set<string>>(new Set())
   const supabase = createClient()
@@ -125,7 +125,7 @@ export default function SeancePage() {
       const newXp = student.xp + activity.xp_reward
       const completedActivityCount = updatedProg.filter(p => p.status === 'completed').length
 
-      const completedSessionsCount = (allSessions as (Session & { activities?: { id: string }[] })[]).filter(s =>
+      const completedSessionsCount = allSessions.filter(s =>
         (s.activities ?? []).length > 0 &&
         (s.activities ?? []).every(a => updatedProg.some(p => p.activity_id === a.id && p.status === 'completed'))
       ).length
