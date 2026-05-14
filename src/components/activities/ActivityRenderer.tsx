@@ -161,7 +161,7 @@ function FlashcardExercise({ content, xpReward, onComplete }: { content: Record<
           <button
             key={i}
             onClick={() => setFlipped(f => { const next = new Set(f); f.has(i) ? next.delete(i) : next.add(i); return next })}
-            className={`p-4 rounded-2xl border-2 text-left transition-all min-h-24 ${flipped.has(i) ? 'bg-lumi-green-light border-lumi-green' : 'bg-lumi-blue-light border-lumi-blue'}`}
+            className={`p-4 rounded-2xl border-2 text-left transition-all min-h-24 ${flipped.has(i) ? 'bg-lumi-green-light border-lumi-green' : 'bg-lumi-blue-light border-lumi-blue'} ${cards.length % 2 !== 0 && i === cards.length - 1 ? 'sm:col-span-2' : ''}`}
           >
             <p className="text-xs font-bold text-lumi-muted mb-1">{flipped.has(i) ? 'Réponse :' : 'Question :'}</p>
             <p className="font-semibold text-lumi-text text-sm">{flipped.has(i) ? card.back : card.front}</p>
