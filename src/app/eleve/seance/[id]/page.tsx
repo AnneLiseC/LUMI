@@ -177,7 +177,7 @@ export default function SeancePage() {
                   <span>{completedCount} / {activities.length} activités</span>
                   <span>{Math.round((completedCount / activities.length) * 100)}%</span>
                 </div>
-                <div className="h-3 bg-white/50 rounded-full overflow-hidden">
+                <div className="h-3 bg-white/50 dark:bg-white/20 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-lumi-green rounded-full transition-all duration-500"
                     style={{ width: `${(completedCount / activities.length) * 100}%` }}
@@ -213,7 +213,7 @@ export default function SeancePage() {
                     className={cn(
                       'w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center gap-4',
                       done
-                        ? 'bg-lumi-green-light border-lumi-green'
+                        ? 'bg-lumi-green-light dark:bg-lumi-green/10 border-lumi-green'
                         : isCurrent
                         ? 'bg-lumi-blue-light dark:bg-lumi-blue/10 border-lumi-blue'
                         : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 hover:border-lumi-blue'
