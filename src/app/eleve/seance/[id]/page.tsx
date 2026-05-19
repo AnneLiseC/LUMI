@@ -258,11 +258,11 @@ export default function SeancePage() {
                 </span>
               </div>
 
-              <div className="bg-white rounded-3xl border-2 border-lumi-blue-light p-6 shadow-sm">
+              <div className="bg-white dark:bg-slate-800 rounded-3xl border-2 border-lumi-blue-light dark:border-lumi-blue/20 p-6 shadow-sm">
                 <div className="mb-6">
-                  <h3 className="text-xl font-black text-lumi-text">{currentActivity.title}</h3>
+                  <h3 className="text-xl font-black text-lumi-text dark:text-slate-100">{currentActivity.title}</h3>
                   {currentActivity.instructions && (
-                    <p className="text-lumi-muted text-sm mt-2 bg-lumi-blue-light rounded-2xl p-3">
+                    <p className="text-lumi-muted dark:text-slate-400 text-sm mt-2 bg-lumi-blue-light dark:bg-lumi-blue/10 rounded-2xl p-3">
                       💡 {currentActivity.instructions}
                     </p>
                   )}
