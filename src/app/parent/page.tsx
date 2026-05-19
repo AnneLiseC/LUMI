@@ -88,10 +88,10 @@ export default function ParentDashboard() {
       <AppLayout role="parent" userName={profile?.first_name}>
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-black text-lumi-text">
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text dark:text-slate-100">
               Bonjour, {profile?.first_name} ! 👋
             </h1>
-            <p className="text-lumi-muted mt-1">
+            <p className="text-lumi-muted dark:text-slate-400 mt-1">
               Suivez la progression de vos enfants sur LUMI.
             </p>
           </div>
@@ -100,8 +100,8 @@ export default function ParentDashboard() {
             <Card>
               <div className="text-center py-10 space-y-4">
                 <div className="text-5xl">👧</div>
-                <h2 className="text-xl font-black text-lumi-text">Aucun enfant lié</h2>
-                <p className="text-lumi-muted max-w-sm mx-auto">
+                <h2 className="text-xl font-black text-lumi-text dark:text-slate-100">Aucun enfant lié</h2>
+                <p className="text-lumi-muted dark:text-slate-400 max-w-sm mx-auto">
                   Demandez à l'administrateur de lier votre compte au profil de votre enfant.
                 </p>
               </div>
@@ -118,10 +118,10 @@ export default function ParentDashboard() {
                           ⭐
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-black text-lumi-text">
+                          <h3 className="text-lg font-black text-lumi-text dark:text-slate-100">
                             {child.profile?.first_name} {child.profile?.last_name}
                           </h3>
-                          <p className="text-sm text-lumi-muted">
+                          <p className="text-sm text-lumi-muted dark:text-slate-400">
                             Niveau {level.level} — {level.name}
                           </p>
                           <div className="mt-3">
@@ -130,18 +130,18 @@ export default function ParentDashboard() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-gray-100">
+                      <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
                         <div className="text-center">
                           <div className="text-xl font-black text-lumi-blue">{child.completed_activities}</div>
-                          <div className="text-xs text-lumi-muted">Activités</div>
+                          <div className="text-xs text-lumi-muted dark:text-slate-400">Activités</div>
                         </div>
                         <div className="text-center">
                           <div className="text-xl font-black text-lumi-green">{child.badges_count}</div>
-                          <div className="text-xs text-lumi-muted">Badges</div>
+                          <div className="text-xs text-lumi-muted dark:text-slate-400">Badges</div>
                         </div>
                         <div className="text-center">
                           <div className="text-xl font-black text-lumi-purple">{child.xp}</div>
-                          <div className="text-xs text-lumi-muted">XP</div>
+                          <div className="text-xs text-lumi-muted dark:text-slate-400">XP</div>
                         </div>
                       </div>
                     </Card>
@@ -153,7 +153,7 @@ export default function ParentDashboard() {
 
           {/* Guide */}
           <Card>
-            <h2 className="text-xl font-black text-lumi-text mb-4">Comment accompagner votre enfant ?</h2>
+            <h2 className="text-xl font-black text-lumi-text dark:text-slate-100 mb-4">Comment accompagner votre enfant ?</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { icon: '💬', title: 'Parlez des séances', text: 'Demandez-lui ce qu\'il a appris après chaque séance.' },
@@ -161,11 +161,11 @@ export default function ParentDashboard() {
                 { icon: '⏰', title: 'Régularité', text: 'Une séance courte par semaine vaut mieux qu\'une longue rarement.' },
                 { icon: '🤔', title: 'Questionnez sans juger', text: '"Comment ça s\'est passé ?" plutôt que "Tu as réussi ?"' },
               ].map(tip => (
-                <div key={tip.title} className="flex items-start gap-3 p-3 bg-lumi-green-light rounded-2xl">
+                <div key={tip.title} className="flex items-start gap-3 p-3 bg-lumi-green-light dark:bg-lumi-green/10 rounded-2xl">
                   <span className="text-2xl">{tip.icon}</span>
                   <div>
-                    <p className="font-bold text-sm text-lumi-text">{tip.title}</p>
-                    <p className="text-xs text-lumi-muted mt-0.5">{tip.text}</p>
+                    <p className="font-bold text-sm text-lumi-text dark:text-slate-100">{tip.title}</p>
+                    <p className="text-xs text-lumi-muted dark:text-slate-400 mt-0.5">{tip.text}</p>
                   </div>
                 </div>
               ))}

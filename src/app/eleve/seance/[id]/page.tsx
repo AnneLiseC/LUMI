@@ -149,7 +149,7 @@ export default function SeancePage() {
               Retour au parcours
             </button>
 
-            <div className="bg-gradient-to-r from-lumi-blue-light to-lumi-purple-light rounded-3xl p-5">
+            <div className="bg-gradient-to-r from-lumi-blue-light to-lumi-purple-light dark:from-lumi-blue/10 dark:to-lumi-purple/10 rounded-3xl p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   {session.is_assessment && (
@@ -162,10 +162,10 @@ export default function SeancePage() {
                       🏆 Projet final
                     </span>
                   )}
-                  <h1 className="text-2xl font-black text-lumi-text">{session.title}</h1>
-                  <p className="text-lumi-muted text-sm mt-1">{session.objective}</p>
+                  <h1 className="text-xl sm:text-2xl font-black text-lumi-text dark:text-slate-100">{session.title}</h1>
+                  <p className="text-lumi-muted dark:text-slate-400 text-sm mt-1">{session.objective}</p>
                 </div>
-                <div className="flex items-center gap-1 text-sm text-lumi-muted flex-shrink-0">
+                <div className="flex items-center gap-1 text-sm text-lumi-muted dark:text-slate-400 flex-shrink-0">
                   <Clock className="w-4 h-4" />
                   <span>{formatDuration(session.estimated_duration_minutes)}</span>
                 </div>
@@ -173,7 +173,7 @@ export default function SeancePage() {
 
               {/* Progress bar */}
               <div className="mt-4">
-                <div className="flex justify-between text-xs text-lumi-muted mb-1">
+                <div className="flex justify-between text-xs text-lumi-muted dark:text-slate-400 mb-1">
                   <span>{completedCount} / {activities.length} activités</span>
                   <span>{Math.round((completedCount / activities.length) * 100)}%</span>
                 </div>
@@ -189,10 +189,10 @@ export default function SeancePage() {
 
           {/* All done! */}
           {allDone && (
-            <div className="bg-lumi-green-light border-2 border-lumi-green rounded-3xl p-6 text-center">
+            <div className="bg-lumi-green-light dark:bg-lumi-green/10 border-2 border-lumi-green rounded-3xl p-6 text-center">
               <Trophy className="w-12 h-12 text-lumi-green mx-auto mb-3" />
-              <h2 className="text-2xl font-black text-green-800">Séance terminée !</h2>
-              <p className="text-green-700 mt-2">Tu as complété toutes les activités. Bravo !</p>
+              <h2 className="text-2xl font-black text-green-800 dark:text-green-300">Séance terminée !</h2>
+              <p className="text-green-700 dark:text-green-400 mt-2">Tu as complété toutes les activités. Bravo !</p>
               <Button onClick={() => router.push('/eleve/parcours')} className="mt-4" size="lg">
                 Retour au parcours →
               </Button>
@@ -202,7 +202,7 @@ export default function SeancePage() {
           {/* Activity list */}
           {!showActivity && (
             <div className="space-y-3">
-              <h2 className="text-lg font-black text-lumi-text">Activités de la séance</h2>
+              <h2 className="text-lg font-black text-lumi-text dark:text-slate-100">Activités de la séance</h2>
               {activities.map((act, i) => {
                 const done = isCompleted(act.id)
                 const isCurrent = i === currentIndex
@@ -215,25 +215,25 @@ export default function SeancePage() {
                       done
                         ? 'bg-lumi-green-light border-lumi-green'
                         : isCurrent
-                        ? 'bg-lumi-blue-light border-lumi-blue'
-                        : 'bg-white border-gray-200 hover:border-lumi-blue'
+                        ? 'bg-lumi-blue-light dark:bg-lumi-blue/10 border-lumi-blue'
+                        : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 hover:border-lumi-blue'
                     )}
                   >
                     <div className={cn(
                       'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-black',
-                      done ? 'bg-lumi-green text-white' : isCurrent ? 'bg-lumi-blue text-white' : 'bg-gray-100 text-lumi-muted'
+                      done ? 'bg-lumi-green text-white' : isCurrent ? 'bg-lumi-blue text-white' : 'bg-gray-100 dark:bg-slate-700 text-lumi-muted dark:text-slate-400'
                     )}>
                       {done ? <CheckCircle className="w-6 h-6" /> : i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-lumi-text text-sm">{act.title}</div>
-                      <div className="text-xs text-lumi-muted mt-0.5 flex items-center gap-2">
+                      <div className="font-bold text-lumi-text dark:text-slate-100 text-sm">{act.title}</div>
+                      <div className="text-xs text-lumi-muted dark:text-slate-400 mt-0.5 flex items-center gap-2">
                         <span>{act.duration_minutes} min</span>
                         <span>·</span>
                         <span>+{act.xp_reward} XP</span>
                       </div>
                     </div>
-                    <span className="text-lumi-muted text-sm">
+                    <span className="text-lumi-muted dark:text-slate-400 text-sm">
                       {done ? '✓' : isCurrent ? '▶' : ''}
                     </span>
                   </button>

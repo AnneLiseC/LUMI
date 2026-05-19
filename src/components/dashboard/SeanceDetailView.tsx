@@ -32,11 +32,11 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     return (
       <div className="space-y-3">
         {questions.map((q, i) => (
-          <div key={i} className="bg-gray-50 rounded-xl p-3 text-sm">
-            <p className="font-semibold text-lumi-text mb-1">{i + 1}. {q.text}</p>
+          <div key={i} className="bg-gray-50 dark:bg-slate-800 rounded-xl p-3 text-sm">
+            <p className="font-semibold text-lumi-text dark:text-slate-100 mb-1">{i + 1}. {q.text}</p>
             <div className="space-y-1">
               {q.options.map((opt, j) => (
-                <div key={j} className={cn('flex items-center gap-2 px-2 py-1 rounded-lg', j === q.correct ? 'bg-green-100 text-green-800 font-semibold' : 'text-lumi-muted')}>
+                <div key={j} className={cn('flex items-center gap-2 px-2 py-1 rounded-lg', j === q.correct ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 font-semibold' : 'text-lumi-muted dark:text-slate-400')}>
                   <span>{j === q.correct ? '✓' : '○'}</span>
                   <span>{opt}</span>
                 </div>
@@ -50,9 +50,9 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
 
   if (type === 'typing') {
     return (
-      <div className="bg-lumi-blue-light rounded-xl p-3">
-        <p className="text-xs font-bold text-lumi-muted mb-1">Texte à taper :</p>
-        <p className="font-mono text-sm text-lumi-text">"{content.text as string}"</p>
+      <div className="bg-lumi-blue-light dark:bg-lumi-blue/10 rounded-xl p-3">
+        <p className="text-xs font-bold text-lumi-muted dark:text-slate-400 mb-1">Texte à taper :</p>
+        <p className="font-mono text-sm text-lumi-text dark:text-slate-100">"{content.text as string}"</p>
       </div>
     )
   }
@@ -61,11 +61,11 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     const steps = (content.steps ?? []) as string[]
     return (
       <div className="space-y-1.5">
-        <p className="text-xs font-bold text-lumi-muted">Ordre correct :</p>
+        <p className="text-xs font-bold text-lumi-muted dark:text-slate-400">Ordre correct :</p>
         {steps.map((step, i) => (
           <div key={i} className="flex items-center gap-2 text-sm">
             <span className="w-5 h-5 rounded-lg bg-lumi-blue text-white flex items-center justify-center text-xs font-black flex-shrink-0">{i + 1}</span>
-            <span className="text-lumi-text">{step}</span>
+            <span className="text-lumi-text dark:text-slate-100">{step}</span>
           </div>
         ))}
       </div>
@@ -109,16 +109,16 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     return (
       <div className="space-y-2">
         {analogy && (
-          <div className="bg-lumi-yellow-light rounded-xl p-3 text-sm">
-            <p className="font-bold">{analogy.title ?? 'Analogie'}</p>
-            {analogy.text && <p className="text-lumi-muted mt-0.5">{analogy.text}</p>}
+          <div className="bg-lumi-yellow-light dark:bg-lumi-yellow/10 rounded-xl p-3 text-sm">
+            <p className="font-bold dark:text-slate-100">{analogy.title ?? 'Analogie'}</p>
+            {analogy.text && <p className="text-lumi-muted dark:text-slate-400 mt-0.5">{analogy.text}</p>}
           </div>
         )}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {cards.map((c, i) => (
-            <div key={i} className="bg-white border border-gray-100 rounded-xl p-2 text-xs">
-              <span className="font-bold">{c.emoji} {c.title}</span>
-              {c.description && <p className="text-lumi-muted mt-0.5">{c.description}</p>}
+            <div key={i} className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-xl p-2 text-xs">
+              <span className="font-bold dark:text-slate-100">{c.emoji} {c.title}</span>
+              {c.description && <p className="text-lumi-muted dark:text-slate-400 mt-0.5">{c.description}</p>}
             </div>
           ))}
         </div>
@@ -132,14 +132,14 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     return (
       <div className="space-y-2">
         {(content.prompt as string | undefined) && (
-          <div className="bg-lumi-blue-light rounded-xl p-2 text-sm">
-            <span className="font-bold">Prompt : </span>"{content.prompt as string}"
+          <div className="bg-lumi-blue-light dark:bg-lumi-blue/10 rounded-xl p-2 text-sm">
+            <span className="font-bold dark:text-slate-100">Prompt : </span>"{content.prompt as string}"
           </div>
         )}
         {responses.map(r => (
-          <div key={r.id} className={cn('rounded-xl p-2 text-xs border-2', r.id === best ? 'border-lumi-green bg-green-50' : 'border-gray-100 bg-gray-50')}>
-            <span className="font-bold">{r.label} {r.id === best ? '✓ Meilleure réponse' : ''}</span>
-            {r.text && <p className="text-lumi-muted mt-0.5 line-clamp-2">{r.text}</p>}
+          <div key={r.id} className={cn('rounded-xl p-2 text-xs border-2', r.id === best ? 'border-lumi-green bg-green-50 dark:bg-green-900/20' : 'border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800')}>
+            <span className="font-bold dark:text-slate-100">{r.label} {r.id === best ? '✓ Meilleure réponse' : ''}</span>
+            {r.text && <p className="text-lumi-muted dark:text-slate-400 mt-0.5 line-clamp-2">{r.text}</p>}
           </div>
         ))}
       </div>

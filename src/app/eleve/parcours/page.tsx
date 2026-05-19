@@ -80,18 +80,18 @@ export default function ParcoursPage() {
       <StudentLayout student={student ?? undefined}>
         <div className="space-y-8">
           <div>
-            <h1 className="text-3xl font-black text-lumi-text">Mon parcours 🗺️</h1>
-            <p className="text-lumi-muted mt-1">Suis les séances dans l'ordre pour progresser !</p>
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text dark:text-slate-100">Mon parcours 🗺️</h1>
+            <p className="text-lumi-muted dark:text-slate-400 mt-1">Suis les séances dans l'ordre pour progresser !</p>
           </div>
 
           {Object.entries(groupedSessions).map(([blockName, blockSessions]) => (
             <div key={blockName} className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="h-px flex-1 bg-gray-200" />
-                <span className="text-sm font-black text-lumi-muted px-3 py-1.5 bg-white rounded-full border border-gray-200">
+                <div className="h-px flex-1 bg-gray-200 dark:bg-slate-700" />
+                <span className="text-sm font-black text-lumi-muted dark:text-slate-300 px-3 py-1.5 bg-white dark:bg-slate-800 rounded-full border border-gray-200 dark:border-slate-700">
                   {blockName}
                 </span>
-                <div className="h-px flex-1 bg-gray-200" />
+                <div className="h-px flex-1 bg-gray-200 dark:bg-slate-700" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

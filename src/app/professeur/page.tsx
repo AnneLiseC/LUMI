@@ -82,8 +82,8 @@ export default function ProfesseurDashboard() {
       <AppLayout role="teacher" userName={profile?.first_name}>
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-black text-lumi-text">Mes élèves 👨‍🏫</h1>
-            <p className="text-lumi-muted mt-1">
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text dark:text-slate-100">Mes élèves 👨‍🏫</h1>
+            <p className="text-lumi-muted dark:text-slate-400 mt-1">
               {students.length} élève{students.length > 1 ? 's' : ''} suivi{students.length > 1 ? 's' : ''}
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function ProfesseurDashboard() {
             <Card padding="sm">
               <div className="text-center">
                 <div className="text-2xl font-black text-lumi-purple">{students.length}</div>
-                <div className="text-xs text-lumi-muted">Élèves</div>
+                <div className="text-xs text-lumi-muted dark:text-slate-400">Élèves</div>
               </div>
             </Card>
             <Card padding="sm">
@@ -101,7 +101,7 @@ export default function ProfesseurDashboard() {
                 <div className="text-2xl font-black text-lumi-blue">
                   {students.reduce((sum, s) => sum + s.completed_count, 0)}
                 </div>
-                <div className="text-xs text-lumi-muted">Activités complétées</div>
+                <div className="text-xs text-lumi-muted dark:text-slate-400">Activités complétées</div>
               </div>
             </Card>
             <Card padding="sm">
@@ -109,7 +109,7 @@ export default function ProfesseurDashboard() {
                 <div className="text-2xl font-black text-lumi-green">
                   {students.reduce((sum, s) => sum + s.xp, 0)}
                 </div>
-                <div className="text-xs text-lumi-muted">XP total</div>
+                <div className="text-xs text-lumi-muted dark:text-slate-400">XP total</div>
               </div>
             </Card>
           </div>
@@ -122,7 +122,7 @@ export default function ProfesseurDashboard() {
                 value={filter}
                 onChange={e => setFilter(e.target.value)}
                 placeholder="Rechercher un élève…"
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-lumi-purple text-sm"
+                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-lumi-purple dark:focus:border-lumi-purple bg-white dark:bg-slate-800 text-lumi-text dark:text-slate-100 placeholder:text-lumi-muted dark:placeholder:text-slate-500 text-sm"
               />
             </div>
           )}
@@ -132,8 +132,8 @@ export default function ProfesseurDashboard() {
             <Card>
               <div className="text-center py-10">
                 <div className="text-5xl mb-4">🎓</div>
-                <h2 className="text-xl font-black text-lumi-text">Aucun élève</h2>
-                <p className="text-lumi-muted mt-2">
+                <h2 className="text-xl font-black text-lumi-text dark:text-slate-100">Aucun élève</h2>
+                <p className="text-lumi-muted dark:text-slate-400 mt-2">
                   {students.length === 0
                     ? 'Demandez à l\'administrateur de lier vos élèves à votre compte.'
                     : 'Aucun élève ne correspond à votre recherche.'}
@@ -153,7 +153,7 @@ export default function ProfesseurDashboard() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
-                            <h3 className="font-black text-lumi-text">
+                            <h3 className="font-black text-lumi-text dark:text-slate-100">
                               {student.profile?.first_name} {student.profile?.last_name}
                             </h3>
                             <span className="text-xs font-bold px-2 py-1 rounded-lg bg-lumi-purple-light text-lumi-purple flex-shrink-0">
@@ -163,7 +163,7 @@ export default function ProfesseurDashboard() {
                           <div className="mt-1">
                             <XPBar xp={student.xp} compact />
                           </div>
-                          <div className="flex gap-4 mt-2 text-xs text-lumi-muted">
+                          <div className="flex gap-4 mt-2 text-xs text-lumi-muted dark:text-slate-400">
                             <span>✅ {student.completed_count} activités</span>
                             <span>🏅 {student.badges_count} badges</span>
                           </div>
