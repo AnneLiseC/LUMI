@@ -89,12 +89,12 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">Programme complet 📚</h1>
-          <p className="text-lumi-muted mt-1">
+          <h1 className="text-2xl sm:text-3xl font-black text-lumi-text dark:text-slate-100">Programme complet 📚</h1>
+          <p className="text-lumi-muted dark:text-slate-400 mt-1">
             {sessions.length} séances · {totalActivities} activités · {formatDuration(totalMinutes)} au total
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setOpenSessions(new Set(sessions.map(s => s.id)))}
             className="text-sm font-semibold px-3 py-2 rounded-xl border-2 border-lumi-purple text-lumi-purple hover:bg-lumi-purple-light transition-colors"
@@ -103,7 +103,7 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
           </button>
           <button
             onClick={() => setOpenSessions(new Set())}
-            className="text-sm font-semibold px-3 py-2 rounded-xl border-2 border-gray-200 text-lumi-muted hover:bg-gray-50 transition-colors"
+            className="text-sm font-semibold px-3 py-2 rounded-xl border-2 border-gray-200 dark:border-slate-700 text-lumi-muted dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             Tout replier
           </button>
@@ -121,10 +121,10 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
               <span className={cn('px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black', colors.badge)}>
                 {blockName}
               </span>
-              <span className="text-xs sm:text-sm text-lumi-muted">
+              <span className="text-sm text-lumi-muted dark:text-slate-400">
                 {blockSessions.length} séances · {formatDuration(blockMinutes)}
               </span>
-              <div className="h-px flex-1 bg-gray-200 hidden sm:block" />
+              <div className="h-px flex-1 bg-gray-200 dark:bg-slate-700" />
             </div>
 
             <div className="space-y-2">
@@ -147,7 +147,7 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="font-black text-lumi-text text-base">{session.title}</h3>
+                          <h3 className="font-black text-lumi-text dark:text-slate-100 text-base">{session.title}</h3>
                           {session.is_assessment && (
                             <span className="text-xs px-2 py-0.5 rounded-full bg-lumi-purple text-white font-bold">Bilan</span>
                           )}
@@ -155,10 +155,10 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
                             <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500 text-white font-bold">Projet final</span>
                           )}
                         </div>
-                        <p className="text-sm text-lumi-muted mt-0.5 line-clamp-1">{session.objective}</p>
+                        <p className="text-sm text-lumi-muted dark:text-slate-400 mt-0.5 line-clamp-1">{session.objective}</p>
                       </div>
 
-                      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 text-sm text-lumi-muted">
+                      <div className="flex items-center gap-3 flex-shrink-0 text-sm text-lumi-muted dark:text-slate-400">
                         <span className="flex items-center gap-1">
                           <Clock className="w-3.5 h-3.5" />
                           {formatDuration(session.estimated_duration_minutes)}
@@ -169,43 +169,43 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
                     </button>
 
                     {isOpen && (
-                      <div className="border-t-2 border-current border-opacity-20 bg-white/70 p-4 space-y-4">
+                      <div className="border-t-2 border-current border-opacity-20 bg-white/70 dark:bg-slate-800/70 p-4 space-y-4">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <div className="bg-white rounded-xl p-3 border border-gray-100">
-                            <p className="text-xs font-black text-lumi-muted uppercase tracking-wide mb-1">🎯 Objectif</p>
-                            <p className="text-sm font-semibold text-lumi-text">{session.objective}</p>
+                          <div className="bg-white dark:bg-slate-800 rounded-xl p-3 border border-gray-100 dark:border-slate-700">
+                            <p className="text-xs font-black text-lumi-muted dark:text-slate-400 uppercase tracking-wide mb-1">🎯 Objectif</p>
+                            <p className="text-sm font-semibold text-lumi-text dark:text-slate-100">{session.objective}</p>
                           </div>
                           {session.description && (
-                            <div className="bg-white rounded-xl p-3 border border-gray-100">
-                              <p className="text-xs font-black text-lumi-muted uppercase tracking-wide mb-1">📄 Description</p>
-                              <p className="text-sm text-lumi-muted">{session.description}</p>
+                            <div className="bg-white dark:bg-slate-800 rounded-xl p-3 border border-gray-100 dark:border-slate-700">
+                              <p className="text-xs font-black text-lumi-muted dark:text-slate-400 uppercase tracking-wide mb-1">📄 Description</p>
+                              <p className="text-sm text-lumi-muted dark:text-slate-400">{session.description}</p>
                             </div>
                           )}
                         </div>
 
                         <div>
-                          <p className="text-xs font-black text-lumi-muted uppercase tracking-wide mb-2">
+                          <p className="text-xs font-black text-lumi-muted dark:text-slate-400 uppercase tracking-wide mb-2">
                             Activités ({activities.length})
                           </p>
                           <div className="space-y-2">
                             {activities.map((act, i) => (
-                              <div key={act.id} className="bg-white rounded-xl border border-gray-100 p-3 flex items-start gap-3">
-                                <span className="w-6 h-6 rounded-lg bg-gray-100 flex items-center justify-center text-xs font-black text-lumi-muted flex-shrink-0 mt-0.5">
+                              <div key={act.id} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-3 flex items-start gap-3">
+                                <span className="w-6 h-6 rounded-lg bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-xs font-black text-lumi-muted dark:text-slate-400 flex-shrink-0 mt-0.5">
                                   {i + 1}
                                 </span>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="font-bold text-sm text-lumi-text">{act.title}</span>
-                                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-lumi-muted font-semibold">
+                                    <span className="font-bold text-sm text-lumi-text dark:text-slate-100">{act.title}</span>
+                                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 text-lumi-muted dark:text-slate-400 font-semibold">
                                       {ACTIVITY_TYPE_LABELS[act.type] ?? act.type}
                                     </span>
                                   </div>
                                   {act.instructions && (
-                                    <p className="text-xs text-lumi-muted mt-1">{act.instructions}</p>
+                                    <p className="text-xs text-lumi-muted dark:text-slate-400 mt-1">{act.instructions}</p>
                                   )}
                                 </div>
                                 <div className="flex-shrink-0 text-right">
-                                  <div className="text-xs font-bold text-lumi-muted">{act.duration_minutes} min</div>
+                                  <div className="text-xs font-bold text-lumi-muted dark:text-slate-400">{act.duration_minutes} min</div>
                                   <div className="text-xs text-lumi-purple font-bold">+{act.xp_reward} XP</div>
                                 </div>
                               </div>

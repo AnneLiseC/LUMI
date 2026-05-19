@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { LogOut, Users, BookOpen, BarChart3, Settings, GraduationCap, Menu, X, TrendingUp } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -31,10 +32,10 @@ const defaultNavItems = {
   ],
 }
 
-const roleColors = {
-  parent: 'bg-lumi-green',
-  teacher: 'bg-lumi-purple',
-  admin: 'bg-red-500',
+const roleGradients = {
+  parent: 'from-lumi-green to-lumi-cyan',
+  teacher: 'from-lumi-purple to-lumi-blue',
+  admin: 'from-red-400 to-orange-400',
 }
 
 const roleLabels = {
@@ -61,113 +62,169 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
   const router = useRouter()
   const supabase = createClient()
   const items = navItems ?? defaultNavItems[role]
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const signOut = async () => {
     await supabase.auth.signOut()
     router.push('/login')
   }
 
-  const closeSidebar = () => setSidebarOpen(false)
+  const NavLinks = ({ onLinkClick }: { onLinkClick?: () => void }) => (
+    <>
+      {items.map((item, i) => {
+        const Icon = item.icon
+        const active = pathname === item.href || pathname.startsWith(item.href + '/')
+        return (
+          <motion.div
+            key={item.href}
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.07 }}
+          >
+            <Link
+              href={item.href}
+              onClick={onLinkClick}
+              className={cn(
+                'flex items-center gap-3 px-4 py-3 rounded-2xl font-bold transition-all text-sm',
+                active
+                  ? 'bg-lumi-purple-light text-lumi-purple dark:bg-lumi-purple/20 dark:text-lumi-purple'
+                  : 'text-lumi-muted dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-lumi-text dark:hover:text-slate-100'
+              )}
+            >
+              <Icon className="w-5 h-5 flex-shrink-0" />
+              {item.label}
+              {active && (
+                <span className="ml-auto w-2 h-2 rounded-full bg-lumi-purple" />
+              )}
+            </Link>
+          </motion.div>
+        )
+      })}
+    </>
+  )
 
   return (
-    <div className="min-h-screen bg-lumi-cream dark:bg-gray-950">
-      {/* Mobile header */}
-      <header className={cn('md:hidden sticky top-0 z-40 text-white shadow-sm', roleColors[role])}>
+    <div className="min-h-screen bg-lumi-cream dark:bg-transparent">
+      {/* Desktop sidebar — hidden on mobile */}
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 shadow-card dark:shadow-card-dark z-40">
+        <div className={cn('p-5 text-white bg-gradient-to-br', roleGradients[role])}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-black text-xl">
+              L
+            </div>
+            <div>
+              <div className="font-black text-xl tracking-tight">LUMI</div>
+              <div className="text-xs opacity-80 font-semibold">{roleLabels[role]}</div>
+            </div>
+          </div>
+          {userName && (
+            <div className="mt-3 text-sm opacity-80 font-semibold">Bonjour, {userName} 👋</div>
+          )}
+        </div>
+
+        <nav className="flex-1 p-4 space-y-1">
+          <NavLinks />
+        </nav>
+
+        <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+          <button
+            onClick={signOut}
+            className="flex-1 flex items-center gap-3 px-4 py-3 rounded-2xl text-lumi-muted dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 dark:hover:text-red-400 transition-all text-sm font-bold"
+          >
+            <LogOut className="w-5 h-5" />
+            Déconnexion
+          </button>
+          <ThemeToggle />
+        </div>
+      </aside>
+
+      {/* Mobile header — hidden on lg */}
+      <header className="lg:hidden sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3 px-4 py-3">
           <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-1.5 rounded-xl bg-white/20 hover:bg-white/30 transition-colors flex-shrink-0"
+            onClick={() => setDrawerOpen(true)}
+            className="p-1.5 rounded-xl text-lumi-muted dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Ouvrir le menu"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6" />
           </button>
-          <LumiLogo />
-          <div className="text-sm opacity-90 font-semibold truncate flex-1">{roleLabels[role]}</div>
-          <ThemeToggle />
+          <div className={cn('w-9 h-9 rounded-xl bg-gradient-to-br flex items-center justify-center font-black text-white text-base', roleGradients[role])}>
+            L
+          </div>
+          <span className="font-black text-lumi-text dark:text-slate-100">LUMI</span>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
-      {/* Backdrop overlay (mobile) */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
-          onClick={closeSidebar}
-          aria-hidden="true"
-        />
-      )}
-
-      <div className="md:flex md:min-h-screen">
-        {/* Sidebar */}
-        <aside
-          className={cn(
-            'fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 flex flex-col shadow-sm',
-            'transition-transform duration-300',
-            'md:static md:sticky md:top-0 md:h-screen md:flex-shrink-0 md:translate-x-0 md:z-auto md:transition-none',
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          )}
-        >
-          <div className={cn('p-5 text-white flex items-center justify-between', roleColors[role])}>
-            <div>
-              <LumiLogo />
-              <div className="text-sm opacity-90 font-semibold mt-1">{roleLabels[role]}</div>
-              {userName && (
-                <div className="text-xs opacity-75 mt-1">Bonjour, {userName} !</div>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              <ThemeToggle className="hidden md:flex" />
-              <button
-                onClick={closeSidebar}
-                className="md:hidden p-1.5 rounded-xl bg-white/20 hover:bg-white/30 transition-colors"
-                aria-label="Fermer le menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {items.map(item => {
-              const Icon = item.icon
-              const active = pathname === item.href || pathname.startsWith(item.href + '/')
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={closeSidebar}
-                  className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition-all text-sm',
-                    active
-                      ? 'bg-lumi-blue-light text-lumi-blue dark:bg-blue-950 dark:text-blue-400'
-                      : 'text-lumi-muted hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-lumi-text'
-                  )}
-                >
-                  <Icon className="w-5 h-5 flex-shrink-0" />
-                  {item.label}
-                </Link>
-              )
-            })}
-          </nav>
-
-          <div className="p-4 border-t border-gray-100 dark:border-gray-800">
-            <button
-              onClick={signOut}
-              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-lumi-muted hover:bg-red-50 hover:text-red-500 transition-all text-sm font-semibold w-full"
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {drawerOpen && (
+          <>
+            <motion.div
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={() => setDrawerOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+            <motion.aside
+              className="fixed inset-y-0 left-0 w-72 z-50 flex flex-col bg-white dark:bg-slate-900 shadow-2xl lg:hidden"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             >
-              <LogOut className="w-5 h-5" />
-              Se déconnecter
-            </button>
-          </div>
-        </aside>
+              <div className={cn('p-5 text-white bg-gradient-to-br', roleGradients[role])}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-black text-xl">
+                      L
+                    </div>
+                    <div>
+                      <div className="font-black text-xl tracking-tight">LUMI</div>
+                      <div className="text-xs opacity-80 font-semibold">{roleLabels[role]}</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setDrawerOpen(false)}
+                    className="p-1.5 rounded-xl bg-white/20 hover:bg-white/30 transition-colors"
+                    aria-label="Fermer le menu"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                {userName && (
+                  <div className="mt-3 text-sm opacity-80 font-semibold">Bonjour, {userName} 👋</div>
+                )}
+              </div>
 
-        {/* Main */}
-        <main className="flex-1 min-w-0">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 md:py-8">
-            {children}
-          </div>
-        </main>
-      </div>
+              <nav className="flex-1 p-4 space-y-1">
+                <NavLinks onLinkClick={() => setDrawerOpen(false)} />
+              </nav>
+
+              <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                <button
+                  onClick={signOut}
+                  className="flex-1 flex items-center gap-3 px-4 py-3 rounded-2xl text-lumi-muted dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 dark:hover:text-red-400 transition-all text-sm font-bold"
+                >
+                  <LogOut className="w-5 h-5" />
+                  Déconnexion
+                </button>
+                <ThemeToggle />
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Main */}
+      <main className="lg:pl-64">
+        <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
+          {children}
+        </div>
+      </main>
     </div>
   )
 }

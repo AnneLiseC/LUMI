@@ -10,11 +10,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', loading, disabled, children, ...props }, ref) => {
     const variants = {
-      primary: 'bg-lumi-blue text-white hover:bg-blue-500 active:bg-blue-600',
-      secondary: 'bg-lumi-purple text-white hover:bg-purple-500 active:bg-purple-600',
-      success: 'bg-lumi-green text-white hover:bg-green-500 active:bg-green-600',
-      danger: 'bg-red-400 text-white hover:bg-red-500 active:bg-red-600',
-      ghost: 'bg-transparent border-2 border-lumi-blue text-lumi-blue hover:bg-lumi-blue-light',
+      primary:
+        'bg-gradient-to-r from-lumi-blue to-lumi-purple text-white shadow-glow-blue hover:shadow-glow hover:opacity-90',
+      secondary:
+        'bg-lumi-purple text-white hover:bg-purple-500 shadow-glow hover:shadow-glow',
+      success:
+        'bg-lumi-green text-white hover:opacity-90 shadow-glow-green',
+      danger:
+        'bg-red-500 text-white hover:bg-red-600',
+      ghost:
+        'bg-transparent border-2 border-lumi-purple text-lumi-purple hover:bg-lumi-purple-light dark:border-lumi-purple dark:text-lumi-purple dark:hover:bg-lumi-purple/10',
     }
 
     const sizes = {
@@ -28,7 +33,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          'font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-lumi-blue/40',
+          'font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-lumi-purple/40',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           'active:scale-95',
           variants[variant],

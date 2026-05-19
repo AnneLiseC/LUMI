@@ -19,37 +19,20 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-
     if (error) {
       toast.error('Email ou mot de passe incorrect.')
       setLoading(false)
       return
     }
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', data.user.id)
-      .single()
-
-    const redirects: Record<string, string> = {
-      student: '/eleve',
-      parent: '/parent',
-      teacher: '/professeur',
-      admin: '/admin',
-    }
-
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
+    const redirects: Record<string, string> = { student: '/eleve', parent: '/parent', teacher: '/professeur', admin: '/admin' }
     toast.success('Bienvenue dans LUMI ! 🌟')
     router.push(redirects[profile?.role ?? 'student'])
     router.refresh()
   }
 
-  const fillDemo = (email: string, password: string) => {
-    setEmail(email)
-    setPassword(password)
-  }
+  const fillDemo = (e: string, p: string) => { setEmail(e); setPassword(p) }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-lumi-blue-light via-lumi-cream to-lumi-purple-light dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center px-4 py-12 relative overflow-hidden">
@@ -120,9 +103,7 @@ export default function LoginPage() {
           <div className="border-t border-gray-100 dark:border-gray-800 pt-4 text-center">
             <p className="text-sm text-lumi-muted">
               Pas encore de compte ?{' '}
-              <Link href="/register" className="text-lumi-blue font-bold hover:underline">
-                Créer un compte
-              </Link>
+              <Link href="/register" className="text-lumi-purple font-black hover:underline">Créer un compte</Link>
             </p>
           </div>
         </motion.div>
@@ -141,14 +122,14 @@ export default function LoginPage() {
               { label: '👨‍👩‍👧 Parent', email: 'parent@lumi.app', password: 'Lumi2024!' },
               { label: '👨‍🏫 Professeur', email: 'annelisecaillet05@gmail.com', password: 'Lumi2024!' },
               { label: '⚙️ Admin', email: 'admin@lumi.app', password: 'Lumi2024!' },
-            ].map(account => (
+            ].map(a => (
               <button
-                key={account.email}
-                onClick={() => fillDemo(account.email, account.password)}
+                key={a.email}
+                onClick={() => fillDemo(a.email, a.password)}
                 className="text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-lumi-blue hover:bg-lumi-blue-light dark:hover:bg-blue-950 transition-all text-left"
               >
-                <span className="block">{account.label}</span>
-                <span className="text-lumi-muted block truncate">{account.email}</span>
+                <span className="block font-black">{a.label}</span>
+                <span className="text-lumi-muted dark:text-slate-500 block truncate">{a.email}</span>
               </button>
             ))}
           </div>

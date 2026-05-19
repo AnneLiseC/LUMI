@@ -1,12 +1,12 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -33,6 +33,17 @@ const config: Config = {
         '3xl': '1.5rem',
         '4xl': '2rem',
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'lumi-gradient': 'linear-gradient(135deg, #6C9FFF 0%, #A78BFA 50%, #22D3EE 100%)',
+      },
+      boxShadow: {
+        glow: '0 0 20px rgba(167,139,250,0.4)',
+        'glow-blue': '0 0 20px rgba(108,159,255,0.4)',
+        'glow-green': '0 0 20px rgba(52,211,153,0.35)',
+        card: '0 4px 24px rgba(0,0,0,0.06)',
+        'card-dark': '0 4px 24px rgba(0,0,0,0.4)',
+      },
       animation: {
         'blob': 'blob 7s infinite',
         'blob-delay': 'blob 7s infinite 2s',
@@ -56,11 +67,15 @@ const config: Config = {
         },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-6px)' },
+          '50%': { transform: 'translateY(-8px)' },
         },
-        xpFill: {
-          '0%': { width: '0%' },
-          '100%': { width: 'var(--xp-width)' },
+        gradientShift: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        glowPulse: {
+          '0%, 100%': { boxShadow: '0 0 10px rgba(167,139,250,0.3)' },
+          '50%': { boxShadow: '0 0 30px rgba(167,139,250,0.7)' },
         },
       },
     },

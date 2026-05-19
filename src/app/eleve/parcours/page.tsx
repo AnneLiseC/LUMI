@@ -87,11 +87,11 @@ export default function ParcoursPage() {
           {Object.entries(groupedSessions).map(([blockName, blockSessions]) => (
             <div key={blockName} className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="h-px flex-1 bg-gray-200" />
-                <span className="text-sm font-black text-lumi-muted px-3 py-1.5 bg-white rounded-full border border-gray-200">
+                <div className="h-px flex-1 bg-gray-200 dark:bg-slate-700" />
+                <span className="text-sm font-black text-lumi-muted dark:text-slate-300 px-3 py-1.5 bg-white dark:bg-slate-800 rounded-full border border-gray-200 dark:border-slate-700">
                   {blockName}
                 </span>
-                <div className="h-px flex-1 bg-gray-200" />
+                <div className="h-px flex-1 bg-gray-200 dark:bg-slate-700" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

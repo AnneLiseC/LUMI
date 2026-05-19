@@ -47,26 +47,42 @@
     color: rgb(148 163 184) !important;
   }
 
-  /* Dyslexia mode */
-  .font-dyslexia {
-    font-family: 'OpenDyslexic', 'Comic Sans MS', 'Arial', sans-serif !important;
-    letter-spacing: 0.05em !important;
-    word-spacing: 0.15em !important;
-    line-height: 1.8 !important;
+  /* Dark mode body */
+  .dark body {
+    background: radial-gradient(ellipse at 20% 0%, #1a1040 0%, #0c0e1a 45%, #080914 100%);
+    background-attachment: fixed;
+    color: #eef0ff;
   }
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-lumi-blue;
   }
+
+  /* Dyslexia mode */
+  .font-dyslexia * {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', 'Arial', sans-serif !important;
+    letter-spacing: 0.06em !important;
+    word-spacing: 0.18em !important;
+    line-height: 1.9 !important;
+  }
 }
 
 @layer components {
-  .lumi-card {
-    @apply bg-white rounded-3xl shadow-sm border border-gray-100 p-6;
+  /* Glass card — dark mode hero */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
   }
 
-  .lumi-btn {
-    @apply font-bold rounded-2xl transition-all duration-200 active:scale-95 focus:outline-none;
+  /* Standard card */
+  .lumi-card {
+    @apply bg-white rounded-3xl shadow-card border border-slate-100;
+    @apply dark:bg-slate-900 dark:border-slate-800 dark:shadow-card-dark;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #6C9FFF 0%, #A78BFA 60%, #22D3EE 100%);
   }
 
   /* LUMI gradient logo */
@@ -75,9 +91,12 @@
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  /* Neon border on hover */
+  .neon-hover {
+    @apply transition-all duration-300;
+  }
+  .neon-hover:hover {
+    box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.6), 0 8px 32px rgba(167, 139, 250, 0.2);
   }
 
   .animation-delay-100 {
@@ -86,8 +105,9 @@
   .animation-delay-200 {
     animation-delay: 200ms;
   }
-  .animation-delay-400 {
-    animation-delay: 400ms;
+
+  .lumi-btn {
+    @apply font-bold rounded-2xl transition-all duration-200 active:scale-95 focus:outline-none;
   }
   .animation-delay-600 {
     animation-delay: 600ms;
@@ -106,13 +126,18 @@
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .animation-delay-100 { animation-delay: 100ms; }
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-300 { animation-delay: 300ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #7C3AED;

@@ -18,11 +18,11 @@ export function SessionCard({ session, completed, total, isUnlocked, isActive }:
   const isDone = percent === 100
 
   const blockColors: Record<string, string> = {
-    'Bloc 0 – Découverte': 'border-lumi-blue bg-lumi-blue-light',
-    'Bloc 1 – Ordinateur & Productivité': 'border-lumi-green bg-lumi-green-light',
-    'Bloc 2 – IA & Esprit critique': 'border-lumi-purple bg-lumi-purple-light',
-    'Bloc 3 – Logique & Autonomie': 'border-lumi-yellow bg-lumi-yellow-light',
-    'Projet final': 'border-orange-400 bg-orange-50',
+    'Bloc 0 – Découverte': 'border-lumi-blue bg-lumi-blue-light dark:border-lumi-blue/50 dark:bg-lumi-blue/10',
+    'Bloc 1 – Ordinateur & Productivité': 'border-lumi-green bg-lumi-green-light dark:border-lumi-green/50 dark:bg-lumi-green/10',
+    'Bloc 2 – IA & Esprit critique': 'border-lumi-purple bg-lumi-purple-light dark:border-lumi-purple/50 dark:bg-lumi-purple/10',
+    'Bloc 3 – Logique & Autonomie': 'border-lumi-yellow bg-lumi-yellow-light dark:border-lumi-yellow/50 dark:bg-lumi-yellow/10',
+    'Projet final': 'border-orange-400 bg-orange-50 dark:border-orange-400/50 dark:bg-orange-400/10',
   }
 
   const colorClass = blockColors[session.block_name] ?? 'border-lumi-blue bg-lumi-blue-light'
@@ -42,7 +42,7 @@ export function SessionCard({ session, completed, total, isUnlocked, isActive }:
       )}
     >
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-white/80 flex items-center justify-center text-xl font-black flex-shrink-0 shadow-sm">
+        <div className="w-12 h-12 rounded-2xl bg-white/80 dark:bg-slate-700/80 flex items-center justify-center text-xl font-black flex-shrink-0 shadow-sm">
           {isDone ? <CheckCircle className="text-lumi-green w-7 h-7" /> : !isUnlocked ? <Lock className="text-gray-400 w-6 h-6" /> : icon}
         </div>
 
@@ -65,16 +65,16 @@ export function SessionCard({ session, completed, total, isUnlocked, isActive }:
             )}
           </div>
 
-          <h3 className="font-bold text-lumi-text text-base mt-1 leading-tight">{session.title}</h3>
-          <p className="text-sm text-lumi-muted mt-1 line-clamp-2">{session.objective}</p>
+          <h3 className="font-bold text-lumi-text dark:text-slate-100 text-base mt-1 leading-tight">{session.title}</h3>
+          <p className="text-sm text-lumi-muted dark:text-slate-400 mt-1 line-clamp-2">{session.objective}</p>
 
           <div className="flex items-center gap-3 mt-3">
-            <div className="flex items-center gap-1 text-xs text-lumi-muted">
+            <div className="flex items-center gap-1 text-xs text-lumi-muted dark:text-slate-400">
               <Clock className="w-3 h-3" />
               <span>{formatDuration(session.estimated_duration_minutes)}</span>
             </div>
             {isUnlocked && total > 0 && (
-              <div className="flex items-center gap-1 text-xs text-lumi-muted">
+              <div className="flex items-center gap-1 text-xs text-lumi-muted dark:text-slate-400">
                 <Star className="w-3 h-3" />
                 <span>{completed}/{total} activités</span>
               </div>
@@ -83,7 +83,7 @@ export function SessionCard({ session, completed, total, isUnlocked, isActive }:
 
           {isUnlocked && total > 0 && (
             <div className="mt-3">
-              <div className="h-2 bg-white/60 rounded-full overflow-hidden">
+              <div className="h-2 bg-white/60 dark:bg-white/20 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-lumi-green rounded-full transition-all duration-500"
                   style={{ width: `${percent}%` }}
@@ -101,7 +101,7 @@ export function SessionCard({ session, completed, total, isUnlocked, isActive }:
             'mt-4 w-full py-2.5 rounded-2xl text-sm font-bold text-center block transition-all',
             isDone
               ? 'bg-lumi-green text-white hover:bg-green-500'
-              : 'bg-white text-lumi-blue hover:bg-lumi-blue hover:text-white'
+              : 'bg-white dark:bg-slate-800 text-lumi-blue hover:bg-lumi-blue hover:text-white'
           )}
         >
           {isDone ? '✓ Revoir la séance' : percent > 0 ? '▶ Continuer' : '▶ Commencer'}

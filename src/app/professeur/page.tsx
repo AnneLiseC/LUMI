@@ -128,8 +128,8 @@ export default function ProfesseurDashboard() {
       <AppLayout role="teacher" userName={profile?.first_name}>
         <div className="space-y-6">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">Mes élèves 👨‍🏫</h1>
-            <p className="text-lumi-muted mt-1">
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text dark:text-slate-100">Mes élèves 👨‍🏫</h1>
+            <p className="text-lumi-muted dark:text-slate-400 mt-1">
               {students.length} élève{students.length > 1 ? 's' : ''} suivi{students.length > 1 ? 's' : ''}
             </p>
           </div>
@@ -138,8 +138,8 @@ export default function ProfesseurDashboard() {
           <div className="grid grid-cols-3 gap-3">
             <Card padding="sm">
               <div className="text-center">
-                <div className="text-xl sm:text-2xl font-black text-lumi-purple">{students.length}</div>
-                <div className="text-xs text-lumi-muted">Élèves</div>
+                <div className="text-2xl font-black text-lumi-purple">{students.length}</div>
+                <div className="text-xs text-lumi-muted dark:text-slate-400">Élèves</div>
               </div>
             </Card>
             <Card padding="sm">
@@ -147,7 +147,7 @@ export default function ProfesseurDashboard() {
                 <div className="text-xl sm:text-2xl font-black text-lumi-blue">
                   {students.reduce((sum, s) => sum + s.completed_count, 0)}
                 </div>
-                <div className="text-xs text-lumi-muted leading-tight">Activités<br className="sm:hidden" /> complétées</div>
+                <div className="text-xs text-lumi-muted dark:text-slate-400">Activités complétées</div>
               </div>
             </Card>
             <Card padding="sm">
@@ -155,7 +155,7 @@ export default function ProfesseurDashboard() {
                 <div className={cn('text-xl sm:text-2xl font-black', inactiveCount > 0 ? 'text-orange-500' : 'text-lumi-green')}>
                   {inactiveCount}
                 </div>
-                <div className="text-xs text-lumi-muted">Inactifs +7j</div>
+                <div className="text-xs text-lumi-muted dark:text-slate-400">XP total</div>
               </div>
             </Card>
           </div>
@@ -212,8 +212,8 @@ export default function ProfesseurDashboard() {
             <Card>
               <div className="text-center py-10">
                 <div className="text-5xl mb-4">🎓</div>
-                <h2 className="text-xl font-black text-lumi-text">Aucun élève</h2>
-                <p className="text-lumi-muted mt-2">
+                <h2 className="text-xl font-black text-lumi-text dark:text-slate-100">Aucun élève</h2>
+                <p className="text-lumi-muted dark:text-slate-400 mt-2">
                   {students.length === 0
                     ? 'Demandez à l\'administrateur de lier vos élèves à votre compte.'
                     : 'Aucun élève ne correspond à votre recherche.'}
@@ -245,7 +245,7 @@ export default function ProfesseurDashboard() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
-                            <h3 className="font-black text-lumi-text">
+                            <h3 className="font-black text-lumi-text dark:text-slate-100">
                               {student.profile?.first_name} {student.profile?.last_name}
                             </h3>
                             <span className="text-xs font-bold px-2 py-1 rounded-lg bg-lumi-purple-light text-lumi-purple flex-shrink-0">

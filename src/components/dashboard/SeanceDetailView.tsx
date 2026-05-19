@@ -32,11 +32,11 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     return (
       <div className="space-y-3">
         {questions.map((q, i) => (
-          <div key={i} className="bg-gray-50 rounded-xl p-3 text-sm">
-            <p className="font-semibold text-lumi-text mb-1">{i + 1}. {q.text}</p>
+          <div key={i} className="bg-gray-50 dark:bg-slate-800 rounded-xl p-3 text-sm">
+            <p className="font-semibold text-lumi-text dark:text-slate-100 mb-1">{i + 1}. {q.text}</p>
             <div className="space-y-1">
               {q.options.map((opt, j) => (
-                <div key={j} className={cn('flex items-center gap-2 px-2 py-1 rounded-lg', j === q.correct ? 'bg-green-100 text-green-800 font-semibold' : 'text-lumi-muted')}>
+                <div key={j} className={cn('flex items-center gap-2 px-2 py-1 rounded-lg', j === q.correct ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 font-semibold' : 'text-lumi-muted dark:text-slate-400')}>
                   <span>{j === q.correct ? '✓' : '○'}</span>
                   <span>{opt}</span>
                 </div>
@@ -50,9 +50,9 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
 
   if (type === 'typing') {
     return (
-      <div className="bg-lumi-blue-light rounded-xl p-3">
-        <p className="text-xs font-bold text-lumi-muted mb-1">Texte à taper :</p>
-        <p className="font-mono text-sm text-lumi-text">"{content.text as string}"</p>
+      <div className="bg-lumi-blue-light dark:bg-lumi-blue/10 rounded-xl p-3">
+        <p className="text-xs font-bold text-lumi-muted dark:text-slate-400 mb-1">Texte à taper :</p>
+        <p className="font-mono text-sm text-lumi-text dark:text-slate-100">"{content.text as string}"</p>
       </div>
     )
   }
@@ -61,11 +61,11 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     const steps = (content.steps ?? []) as string[]
     return (
       <div className="space-y-1.5">
-        <p className="text-xs font-bold text-lumi-muted">Ordre correct :</p>
+        <p className="text-xs font-bold text-lumi-muted dark:text-slate-400">Ordre correct :</p>
         {steps.map((step, i) => (
           <div key={i} className="flex items-center gap-2 text-sm">
             <span className="w-5 h-5 rounded-lg bg-lumi-blue text-white flex items-center justify-center text-xs font-black flex-shrink-0">{i + 1}</span>
-            <span className="text-lumi-text">{step}</span>
+            <span className="text-lumi-text dark:text-slate-100">{step}</span>
           </div>
         ))}
       </div>
@@ -109,16 +109,16 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     return (
       <div className="space-y-2">
         {analogy && (
-          <div className="bg-lumi-yellow-light rounded-xl p-3 text-sm">
-            <p className="font-bold">{analogy.title ?? 'Analogie'}</p>
-            {analogy.text && <p className="text-lumi-muted mt-0.5">{analogy.text}</p>}
+          <div className="bg-lumi-yellow-light dark:bg-lumi-yellow/10 rounded-xl p-3 text-sm">
+            <p className="font-bold dark:text-slate-100">{analogy.title ?? 'Analogie'}</p>
+            {analogy.text && <p className="text-lumi-muted dark:text-slate-400 mt-0.5">{analogy.text}</p>}
           </div>
         )}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {cards.map((c, i) => (
-            <div key={i} className="bg-white border border-gray-100 rounded-xl p-2 text-xs">
-              <span className="font-bold">{c.emoji} {c.title}</span>
-              {c.description && <p className="text-lumi-muted mt-0.5">{c.description}</p>}
+            <div key={i} className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-xl p-2 text-xs">
+              <span className="font-bold dark:text-slate-100">{c.emoji} {c.title}</span>
+              {c.description && <p className="text-lumi-muted dark:text-slate-400 mt-0.5">{c.description}</p>}
             </div>
           ))}
         </div>
@@ -132,14 +132,14 @@ function ContentSummary({ type, content }: { type: string; content: Record<strin
     return (
       <div className="space-y-2">
         {(content.prompt as string | undefined) && (
-          <div className="bg-lumi-blue-light rounded-xl p-2 text-sm">
-            <span className="font-bold">Prompt : </span>"{content.prompt as string}"
+          <div className="bg-lumi-blue-light dark:bg-lumi-blue/10 rounded-xl p-2 text-sm">
+            <span className="font-bold dark:text-slate-100">Prompt : </span>"{content.prompt as string}"
           </div>
         )}
         {responses.map(r => (
-          <div key={r.id} className={cn('rounded-xl p-2 text-xs border-2', r.id === best ? 'border-lumi-green bg-green-50' : 'border-gray-100 bg-gray-50')}>
-            <span className="font-bold">{r.label} {r.id === best ? '✓ Meilleure réponse' : ''}</span>
-            {r.text && <p className="text-lumi-muted mt-0.5 line-clamp-2">{r.text}</p>}
+          <div key={r.id} className={cn('rounded-xl p-2 text-xs border-2', r.id === best ? 'border-lumi-green bg-green-50 dark:bg-green-900/20' : 'border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800')}>
+            <span className="font-bold dark:text-slate-100">{r.label} {r.id === best ? '✓ Meilleure réponse' : ''}</span>
+            {r.text && <p className="text-lumi-muted dark:text-slate-400 mt-0.5 line-clamp-2">{r.text}</p>}
           </div>
         ))}
       </div>
@@ -256,7 +256,7 @@ export function SeanceDetailView({ sessionId, backPath }: SeanceDetailViewProps)
         Retour au programme
       </button>
 
-      <div className="bg-gradient-to-r from-lumi-purple-light to-lumi-blue-light rounded-3xl p-6">
+      <div className="bg-gradient-to-r from-lumi-purple-light to-lumi-blue-light dark:from-lumi-purple/10 dark:to-lumi-blue/10 rounded-3xl p-6">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="flex gap-2 mb-2">
@@ -270,39 +270,39 @@ export function SeanceDetailView({ sessionId, backPath }: SeanceDetailViewProps)
                 {session.block_name}
               </span>
             </div>
-            <h1 className="text-2xl font-black text-lumi-text">{session.title}</h1>
-            <p className="text-lumi-muted mt-1">{session.description}</p>
+            <h1 className="text-xl sm:text-2xl font-black text-lumi-text dark:text-slate-100">{session.title}</h1>
+            <p className="text-lumi-muted dark:text-slate-400 mt-1">{session.description}</p>
           </div>
-          <div className="flex gap-4 text-sm">
-            <div className="text-center bg-white/70 rounded-2xl px-4 py-3">
+          <div className="flex flex-wrap gap-3 text-sm">
+            <div className="text-center bg-white/70 dark:bg-white/10 rounded-2xl px-4 py-3 min-w-[80px]">
               <div className="flex items-center gap-1 font-black text-lumi-blue">
                 <Clock className="w-4 h-4" />
                 {formatDuration(session.estimated_duration_minutes)}
               </div>
-              <div className="text-xs text-lumi-muted mt-0.5">Durée</div>
+              <div className="text-xs text-lumi-muted dark:text-slate-400 mt-0.5">Durée</div>
             </div>
-            <div className="text-center bg-white/70 rounded-2xl px-4 py-3">
+            <div className="text-center bg-white/70 dark:bg-white/10 rounded-2xl px-4 py-3 min-w-[80px]">
               <div className="font-black text-lumi-purple">{activities.length}</div>
-              <div className="text-xs text-lumi-muted mt-0.5">Activités</div>
+              <div className="text-xs text-lumi-muted dark:text-slate-400 mt-0.5">Activités</div>
             </div>
-            <div className="text-center bg-white/70 rounded-2xl px-4 py-3">
+            <div className="text-center bg-white/70 dark:bg-white/10 rounded-2xl px-4 py-3 min-w-[80px]">
               <div className="flex items-center gap-1 font-black text-yellow-600">
                 <Zap className="w-4 h-4" />
                 {totalXp}
               </div>
-              <div className="text-xs text-lumi-muted mt-0.5">XP total</div>
+              <div className="text-xs text-lumi-muted dark:text-slate-400 mt-0.5">XP total</div>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 bg-white/70 rounded-2xl p-4">
-          <p className="text-xs font-black text-lumi-muted uppercase tracking-wide mb-1">🎯 Objectif pédagogique</p>
-          <p className="font-semibold text-lumi-text">{session.objective}</p>
+        <div className="mt-4 bg-white/70 dark:bg-white/10 rounded-2xl p-4">
+          <p className="text-xs font-black text-lumi-muted dark:text-slate-400 uppercase tracking-wide mb-1">🎯 Objectif pédagogique</p>
+          <p className="font-semibold text-lumi-text dark:text-slate-100">{session.objective}</p>
         </div>
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-xl font-black text-lumi-text flex items-center gap-2">
+        <h2 className="text-xl font-black text-lumi-text dark:text-slate-100 flex items-center gap-2">
           <BookOpen className="w-5 h-5 text-lumi-purple" />
           Détail des activités
         </h2>
@@ -316,12 +316,12 @@ export function SeanceDetailView({ sessionId, backPath }: SeanceDetailViewProps)
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-3 flex-wrap">
                   <div>
-                    <h3 className="font-black text-lumi-text text-base">{act.title}</h3>
+                    <h3 className="font-black text-lumi-text dark:text-slate-100 text-base">{act.title}</h3>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       <span className="text-xs px-2 py-0.5 rounded-full bg-lumi-purple-light text-lumi-purple font-bold">
                         {ACTIVITY_TYPE_LABELS[act.type] ?? act.type}
                       </span>
-                      <span className="text-xs text-lumi-muted flex items-center gap-1">
+                      <span className="text-xs text-lumi-muted dark:text-slate-400 flex items-center gap-1">
                         <Clock className="w-3 h-3" />{act.duration_minutes} min
                       </span>
                       <span className="text-xs text-yellow-600 font-bold">+{act.xp_reward} XP</span>
@@ -330,14 +330,14 @@ export function SeanceDetailView({ sessionId, backPath }: SeanceDetailViewProps)
                 </div>
 
                 {act.instructions && (
-                  <div className="mt-3 bg-lumi-blue-light rounded-xl p-3">
-                    <p className="text-xs font-bold text-lumi-muted mb-0.5">💡 Consigne pour l'élève</p>
-                    <p className="text-sm text-lumi-text">{act.instructions}</p>
+                  <div className="mt-3 bg-lumi-blue-light dark:bg-lumi-blue/10 rounded-xl p-3">
+                    <p className="text-xs font-bold text-lumi-muted dark:text-slate-400 mb-0.5">💡 Consigne pour l'élève</p>
+                    <p className="text-sm text-lumi-text dark:text-slate-100">{act.instructions}</p>
                   </div>
                 )}
 
                 <div className="mt-3">
-                  <p className="text-xs font-bold text-lumi-muted uppercase tracking-wide mb-2">Contenu de l'activité</p>
+                  <p className="text-xs font-bold text-lumi-muted dark:text-slate-400 uppercase tracking-wide mb-2">Contenu de l'activité</p>
                   <ContentSummary type={act.type} content={act.content as Record<string, unknown>} />
                 </div>
               </div>

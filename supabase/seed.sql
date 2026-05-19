@@ -227,134 +227,154 @@ from b1, (values
 on conflict do nothing;
 
 -- ============================================================
--- SESSION 5 – Découvrir l'IA
+-- SESSION 5 – L'IA que tu connais déjà
 -- ============================================================
 with s5 as (
   insert into sessions (session_number, title, block_name, objective, description, order_index, estimated_duration_minutes)
-  values (6, 'Découvrir l''intelligence artificielle', 'Bloc 2 – IA & Esprit critique',
-          'Comprendre ce qu''est une IA.',
-          'Plonge dans le monde fascinant de l''intelligence artificielle !',
-          6, 30)
+  values (6, 'L''IA que tu connais déjà ! 🤖', 'Bloc 2 – IA & Esprit critique',
+          'Comprendre comment fonctionne une IA et ce qui la rend différente des autres applis.',
+          'Tu as déjà parlé à une IA — maintenant découvre comment ça marche vraiment sous le capot !',
+          6, 35)
   returning id
 )
 insert into activities (session_id, title, type, duration_minutes, instructions, content, order_index, xp_reward)
 select s5.id, act.title, act.type, act.dur, act.instr, act.content::jsonb, act.ord, act.xp
 from s5, (values
-  ('IA ou pas IA ?', 'quiz', 7,
-   'Pour chaque exemple, dis si c''est une IA ou non.',
-   '{"questions":[{"id":"ia1","text":"Une calculatrice de poche","emoji":"🧮","options":["C''est une IA","Ce n''est pas une IA"],"correct":1,"explanation":"Une calculatrice fait des calculs préprogrammés, elle n''apprend pas."},{"id":"ia2","text":"Un assistant vocal comme Siri","emoji":"🎙️","options":["C''est une IA","Ce n''est pas une IA"],"correct":0,"explanation":"Oui ! Il comprend la voix, apprend de tes habitudes et répond intelligemment."},{"id":"ia3","text":"Un moteur de recherche basique","emoji":"🔍","options":["C''est une IA","Ce n''est pas une IA"],"correct":1,"explanation":"Un moteur de base cherche des mots-clés. Les IA modernes font bien plus !"},{"id":"ia4","text":"Un chatbot qui répond à tes questions","emoji":"🤖","options":["C''est une IA","Ce n''est pas une IA"],"correct":0,"explanation":"Oui ! Il comprend le langage naturel et génère des réponses adaptées."},{"id":"ia5","text":"Un jeu vidéo avec des ennemis qui s''adaptent","emoji":"🎮","options":["C''est une IA","Ce n''est pas une IA"],"correct":0,"explanation":"Oui ! L''IA de jeu apprend de tes actions pour s''adapter à ton niveau."}]}',
-   1, 20),
-  ('À quoi sert une IA ?', 'card', 5,
-   'Découvre les différentes choses qu''une IA peut faire pour toi.',
-   '{"cards":[{"title":"Expliquer","emoji":"💡","description":"L''IA peut expliquer des concepts difficiles dans des mots simples."},{"title":"Résumer","emoji":"📋","description":"Elle peut lire un long texte et te donner l''essentiel."},{"title":"Donner des idées","emoji":"🌈","description":"Bloqué sur un sujet ? L''IA peut te suggérer des pistes."},{"title":"Corriger","emoji":"✏️","description":"Elle peut repérer les fautes dans ton texte."},{"title":"Aider à réviser","emoji":"📚","description":"Elle peut te poser des questions sur ta leçon."},{"title":"Générer des images","emoji":"🎨","description":"Certaines IA créent des images à partir de descriptions."}]}',
-   2, 10),
-  ('Ce qu''une IA ne sait pas faire', 'quiz', 5,
-   'Vrai ou faux ? Teste ce que tu sais sur les limites des IA.',
-   '{"type":"true_false","questions":[{"id":"lim1","text":"Une IA peut parfois se tromper","correct":true,"explanation":"Oui ! Les IA font des erreurs. C''est pourquoi il faut toujours vérifier les informations importantes."},{"id":"lim2","text":"Une IA peut remplacer mon cerveau","correct":false,"explanation":"Non ! L''IA est un outil. C''est toi qui réfléchis, qui choisis et qui crées."},{"id":"lim3","text":"Je dois vérifier les réponses importantes d''une IA","correct":true,"explanation":"Exactement ! Même si l''IA est souvent juste, elle peut se tromper sur des faits."},{"id":"lim4","text":"Une IA connaît toujours l''actualité récente","correct":false,"explanation":"Non ! Les IA ont une date limite de connaissance et ne sont pas toujours à jour."}]}',
-   3, 20),
-  ('Mon premier prompt', 'editor', 8,
-   'Écris une question claire pour une IA sur un sujet de ton choix.',
-   '{"task":"Écris une question précise que tu pourrais poser à une IA pour t''aider dans tes devoirs.","examples":["Explique-moi les volcans avec des mots simples pour un enfant de 10 ans.","Donne-moi 3 exemples de la vie quotidienne qui utilisent les fractions."],"min_length":20,"placeholder":"Ma question pour l''IA..."}',
+  ('Sous le capot d''une IA 🔧', 'card', 5,
+   'Tu as déjà utilisé une IA — maintenant découvre ce qui se passe quand tu lui parles !',
+   '{"intro":true,"cards":[{"title":"Une IA a lu presque tout Internet","emoji":"📖","description":"Avant de te répondre, une IA a lu des milliards de textes : livres, articles, sites web… C''est comme si elle avait lu toute une bibliothèque géante avant d''arriver en classe !"},{"title":"Elle prédit la suite des mots","emoji":"🔮","description":"Une IA ne cherche pas une réponse dans un livre. Elle prédit, mot par mot, la suite la plus probable. C''est pour ça qu''elle peut parfois se tromper — elle invente !"},{"title":"Elle oublie entre les conversations","emoji":"🧹","description":"Si tu fermes la conversation et en ouvres une nouvelle, l''IA t''a oublié ! Elle repart de zéro à chaque fois. C''est pour ça qu''on se présente au début."}]}',
+   1, 10),
+  ('L''IA que tu connais déjà 🕵️', 'quiz', 8,
+   'Tu as déjà essayé de parler à une IA. Voyons ce que tu sais vraiment !',
+   '{"questions":[{"id":"ia1","text":"YouTube choisit les vidéos selon ce que tu regardes souvent","emoji":"▶️","options":["C''est une IA 🤖","Pas une IA ❌"],"correct":0,"explanation":"Oui ! YouTube utilise une IA qui observe TES habitudes pour te proposer des vidéos que tu vas adorer."},{"id":"ia2","text":"Une IA peut inventer une histoire que personne n''a jamais écrite avant","emoji":"✍️","options":["Vrai ✅","Faux ❌"],"correct":0,"explanation":"Vrai ! Une IA génère du contenu nouveau à chaque fois — elle ne copie pas, elle crée."},{"id":"ia3","text":"Si une IA te dit quelque chose, c''est forcément vrai","emoji":"🤔","options":["Vrai ✅","Faux ❌"],"correct":1,"explanation":"Faux ! Une IA peut inventer des choses qui semblent vraies mais qui sont fausses. On appelle ça des ''hallucinations''. Toujours vérifier !"},{"id":"ia4","text":"Tu peux parler à voix haute et une IA comprend ce que tu dis","emoji":"🎙️","options":["Vrai ✅","Faux ❌"],"correct":0,"explanation":"Vrai ! Tu peux utiliser le micro de ton téléphone ou ta tablette pour dicter ta question — c''est encore plus facile qu''écrire !"},{"id":"ia5","text":"Une IA se souvient de la conversation de la semaine dernière","emoji":"📅","options":["Vrai ✅","Faux ❌"],"correct":1,"explanation":"Faux ! Chaque nouvelle conversation repart de zéro. C''est pour ça qu''on se présente à chaque fois."}]}',
+   2, 25),
+  ('Trie les super-pouvoirs de l''IA ! 💪', 'drag_drop', 7,
+   'Glisse chaque capacité dans la bonne case : l''IA SAIT faire ✅ ou l''IA NE SAIT PAS faire ❌',
+   '{"categories":[{"id":"can","label":"L''IA SAIT faire ✅","color":"green"},{"id":"cannot","label":"L''IA NE SAIT PAS faire ❌","color":"red"}],"items":[{"id":"i1","label":"Écrire une histoire rigolote","category":"can","emoji":"✍️"},{"id":"i2","label":"Sentir si ta pizza est brûlée","category":"cannot","emoji":"🍕"},{"id":"i3","label":"Traduire en 50 langues","category":"can","emoji":"🌍"},{"id":"i4","label":"Être vraiment de bonne humeur","category":"cannot","emoji":"😄"},{"id":"i5","label":"Expliquer une leçon difficile","category":"can","emoji":"📚"},{"id":"i6","label":"Te faire un câlin quand tu es triste","category":"cannot","emoji":"🤗"},{"id":"i7","label":"Corriger tes fautes d''orthographe","category":"can","emoji":"✏️"},{"id":"i8","label":"Savoir ce qui s''est passé aujourd''hui","category":"cannot","emoji":"📰"}],"shuffle":true,"tip":"Une IA peut se tromper, n''a pas de corps, et ne connaît pas les événements très récents !"}',
+   3, 25),
+  ('Présente-toi à l''IA ! 🎯', 'editor', 8,
+   'Pour que l''IA te réponde mieux, présente-toi ! Tu peux dicter à voix haute 🎙️ ou écrire — les fautes d''orthographe ne comptent pas, elle comprend quand même 😊',
+   '{"voice_enabled":true,"spelling_tolerance":true,"voice_tip":"Appuie sur le micro 🎙️ de ton clavier pour parler au lieu d''écrire !","spelling_note":"Pas de stress si tu fais des fautes — une IA comprend très bien même si les mots ne sont pas parfaits !","tasks":[{"id":"t1","emoji":"🙋","label":"Qui tu es","placeholder":"J''ai ... ans, je suis en ...","starter":"J''ai","min_length":5},{"id":"t2","emoji":"❤️","label":"Ce que tu aimes","placeholder":"J''adore... comme sujet, j''aime aussi...","starter":"J''adore","min_length":5}],"tip":"Ces 2 phrases, colle-les au début quand tu parles à une IA pour qu''elle adapte ses réponses pour toi !"}',
    4, 20),
   ('Exercice clavier', 'typing', 5,
-   'Tape cette phrase pour terminer.',
-   '{"text":"Une IA peut m''aider, mais je dois réfléchir aussi.","target_wpm":18,"show_timer":false}',
-   5, 10)
+   'Tape cette phrase pour terminer la séance !',
+   '{"text":"Une IA peut se tromper, alors je vérifie toujours.","target_wpm":18,"show_timer":false}',
+   5, 15)
 ) as act(title, type, dur, instr, content, ord, xp)
 on conflict do nothing;
 
 -- ============================================================
--- SESSION 6 – Bien poser une question à une IA
+-- SESSION 6 – Parle à une IA comme un pro
 -- ============================================================
 with s6 as (
   insert into sessions (session_number, title, block_name, objective, description, order_index, estimated_duration_minutes)
-  values (7, 'Bien poser une question à une IA', 'Bloc 2 – IA & Esprit critique',
-          'Apprendre à formuler un bon prompt.',
-          'Apprends l''art de poser des questions claires pour obtenir de super réponses !',
-          7, 35)
+  values (7, 'Parle à une IA comme un pro ! 🎯', 'Bloc 2 – IA & Esprit critique',
+          'Apprendre à formuler des questions claires pour obtenir les meilleures réponses.',
+          'Une bonne question = une super réponse ! Apprends le secret des meilleurs utilisateurs d''IA.',
+          7, 40)
   returning id
 )
 insert into activities (session_id, title, type, duration_minutes, instructions, content, order_index, xp_reward)
 select s6.id, act.title, act.type, act.dur, act.instr, act.content::jsonb, act.ord, act.xp
 from s6, (values
-  ('Question floue ou claire ?', 'comparison', 8,
-   'Compare ces questions et dis laquelle est la meilleure.',
-   '{"pairs":[{"id":"p1","label":"Questions sur les maths","vague":"Explique-moi les maths","clear":"Explique-moi les fractions avec un exemple simple pour un élève de CM2","why":"La question claire précise le sujet exact, le niveau, et demande un exemple."},{"id":"p2","label":"Questions sur l''histoire","vague":"Parle-moi de la guerre","clear":"Explique-moi les 3 causes principales de la Première Guerre mondiale en quelques phrases simples","why":"La question claire précise le sujet, le nombre de points, et le format souhaité."},{"id":"p3","label":"Questions sur les sciences","vague":"C''est quoi les plantes ?","clear":"Comment fonctionne la photosynthèse ? Explique avec une analogie simple pour un enfant de 10 ans","why":"La question claire demande un processus précis et un format adapté à ton âge."}]}',
-   1, 20),
-  ('La formule magique', 'card', 5,
-   'Mémorise cette formule pour créer de super prompts !',
-   '{"title":"La formule magique du prompt","steps":[{"num":1,"label":"Mon niveau","emoji":"🎯","example":"Je suis en CM2"},{"num":2,"label":"Mon besoin","emoji":"💭","example":"J''ai besoin de comprendre les volcans"},{"num":3,"label":"Le format","emoji":"📋","example":"Donne-moi une explication en 3 points simples"},{"num":4,"label":"Un exemple","emoji":"✨","example":"Avec un exemple de la vie réelle"}],"example_prompt":"Je suis en CM2. J''ai besoin de comprendre les volcans. Explique-moi en 3 points simples avec un exemple de la vie réelle."}',
-   2, 10),
-  ('Atelier prompt', 'editor', 10,
-   'Écris 3 prompts en utilisant la formule magique.',
-   '{"tasks":[{"id":"t1","label":"Pour comprendre une leçon","placeholder":"Je suis en... J''ai besoin de comprendre... Explique-moi en..."},{"id":"t2","label":"Pour corriger un texte","placeholder":"Je suis en... Mon texte parle de... Corrige mes erreurs et..."},{"id":"t3","label":"Pour trouver une méthode de maths","placeholder":"Je suis en... Je bloque sur... Montre-moi les étapes pour..."}],"min_length":20}',
-   3, 20),
+  ('Le jeu du téléphone raté 😅', 'comparison', 8,
+   'Regarde ce qui se passe quand on pose une question trop floue à une IA — c''est la catastrophe ! Choisis la meilleure question à chaque fois.',
+   '{"intro":"Quand une question est trop floue, l''IA répond à côté. Choisis la meilleure question dans chaque paire !","pairs":[{"id":"p1","label":"Pour les devoirs de sciences","vague":"Parle-moi des animaux","vague_result":"Voici une liste de 500 animaux qui existent sur Terre…","clear":"Explique-moi comment les dauphins communiquent, avec 2 exemples rigolos, pour un enfant de 9 ans","clear_result":"Les dauphins parlent avec des clics et des sifflements — c''est leur langage secret !","why":"La question précise dit QUOI (dauphins), COMMENT (exemples rigolos) et POUR QUI (9 ans)."},{"id":"p2","label":"Pour inventer une histoire","vague":"Écris une histoire","vague_result":"Il était une fois un personnage qui vivait quelque part…","clear":"Invente une histoire courte et drôle avec un chat qui veut devenir astronaute mais qui a le mal de l''espace","clear_result":"Milo le chat avait toujours rêvé d''espace. Mais dès qu''il monta dans la fusée… il vomit sur le commandant !","why":"Personnage + rêve + problème drôle = l''IA sait exactement quoi inventer !"},{"id":"p3","label":"Pour réviser les maths","vague":"Aide-moi en maths","vague_result":"Les mathématiques est une science qui étudie les nombres…","clear":"Je suis en CM1, j''arrive pas à faire les divisions. Montre-moi 48÷6 étape par étape","clear_result":"Étape 1 : combien de fois 6 rentre dans 48 ? 8 fois ! Donc 48÷6 = 8 🎉","why":"Niveau + problème exact + format voulu = réponse parfaite !"}]}',
+   1, 25),
+  ('La recette du super prompt 🍳', 'card', 6,
+   'Mémorise les 3 ingrédients. Avec eux, l''IA te donnera toujours de super réponses !',
+   '{"title":"La recette du super prompt","subtitle":"3 ingrédients = 1 réponse parfaite","steps":[{"num":1,"label":"🙋 Dis qui tu es","emoji":"🙋","example":"J''ai 9 ans, je suis en CM1","tip":"L''IA adapte son langage selon ton âge. Dis-le lui !"},{"num":2,"label":"🎯 Dis ce que tu veux","emoji":"🎯","example":"Explique-moi les volcans / Invente une blague / Aide-moi pour...","tip":"Sois précis sur le sujet. Plus c''est clair, mieux c''est !"},{"num":3,"label":"🎨 Dis comment tu le veux","emoji":"🎨","example":"Avec des mots simples / En 3 étapes / Avec un exemple rigolo","tip":"Court ou long ? Sérieux ou drôle ? Dis-le !"}],"example":{"label":"Exemple — tu peux le dicter à voix haute ! 🎙️","text":"J''ai 9 ans, je suis en CM1. Explique-moi les volcans en 3 étapes avec un exemple rigolo."},"voice_tip":"Pas besoin d''écrire : dicte ta question avec le micro de ton téléphone ou ta tablette !","badge_hint":"Maîtrise cette recette pour débloquer le badge Prompt Malin ! 🏆"}',
+   2, 15),
+  ('Construis le prompt parfait ! 🧩', 'quiz', 10,
+   'Pour chaque mission, choisis les bons morceaux pour assembler un super prompt. Pas besoin d''écrire — juste cliquer !',
+   '{"type":"prompt_builder","missions":[{"id":"m1","emoji":"🦁","context":"Tu veux en savoir plus sur les lions pour un exposé","base":"Parle-moi des lions","pieces":[{"id":"who","label":"Qui tu es","options":["j''ai 9 ans","je suis adulte","je suis un lion"],"correct":0},{"id":"what","label":"Ce que tu veux exactement","options":["quelque chose sur les lions","comment les lions chassent et vivent en groupe","tout sur l''Afrique"],"correct":1},{"id":"how","label":"Comment tu le veux","options":["en 3 points avec des anecdotes sympas","le plus long possible","avec des mots compliqués"],"correct":0}],"result":"J''ai 9 ans. Explique-moi comment les lions chassent et vivent en groupe, en 3 points avec des anecdotes sympas."},{"id":"m2","emoji":"🎃","context":"Tu veux une histoire d''Halloween pour faire rire tes amis","base":"Écris une histoire","pieces":[{"id":"who","label":"Qui tu es","options":["j''ai 9 ans","je suis un fantôme","peu importe"],"correct":0},{"id":"what","label":"Le sujet exact","options":["quelque chose d''effrayant","une histoire courte avec un fantôme maladroit qui fait rire au lieu de faire peur","une histoire triste"],"correct":1},{"id":"how","label":"Le style","options":["avec des mots simples et des rebondissements rigolos","le plus long possible","très sérieuse"],"correct":0}],"result":"J''ai 9 ans. Invente une histoire courte avec un fantôme maladroit qui fait rire au lieu de faire peur, avec des mots simples et des rebondissements rigolos."}]}',
+   3, 30),
+  ('Mon prompt vocal 🎙️', 'editor', 8,
+   'Crée 1 vrai prompt pour quelque chose qui t''intéresse cette semaine. Dicte-le à voix haute si tu veux — les fautes ne comptent pas, l''IA comprend quand même !',
+   '{"voice_enabled":true,"spelling_tolerance":true,"voice_tip":"Appuie sur le micro 🎙️ de ton clavier pour parler au lieu d''écrire !","spelling_note":"Écris comme tu parles, même avec des fautes — une IA comprend très bien le langage naturel 😊","tasks":[{"id":"p1","label":"Mon prompt de la semaine 🌟","placeholder":"J''ai 9 ans... explique-moi... avec des mots simples","starter":"J''ai 9 ans,","min_length":8,"tip":"Pense à un truc de tes devoirs ou quelque chose qui te rend curieux en ce moment !"}],"success_message":"Super ! Ce prompt tu peux le dicter ou le copier dans une vraie IA 🚀","badge_hint":"Termine ce prompt pour débloquer le badge Prompt Malin ! 🤖"}',
+   4, 25),
   ('Exercice clavier', 'typing', 5,
-   'Tape cette phrase pour terminer.',
-   '{"text":"Plus ma question est claire, plus la réponse est utile.","target_wpm":18,"show_timer":false}',
-   4, 10)
+   'Tape la phrase secrète du prompt master pour finir la séance !',
+   '{"text":"Plus ma question est précise, plus la réponse est géniale !","target_wpm":18,"show_timer":false}',
+   5, 15)
 ) as act(title, type, dur, instr, content, ord, xp)
 on conflict do nothing;
 
 -- ============================================================
--- SESSION 7 – Comparer plusieurs IA
+-- SESSION 7 – Toutes les IA se valent ?
 -- ============================================================
 with s7 as (
   insert into sessions (session_number, title, block_name, objective, description, order_index, estimated_duration_minutes)
-  values (8, 'Comparer plusieurs IA', 'Bloc 2 – IA & Esprit critique',
-          'Comprendre que les IA ont des réponses différentes.',
-          'Apprends à choisir la meilleure réponse parmi plusieurs IA.',
-          8, 35)
+  values (8, 'Toutes les IA se valent ? 🥊', 'Bloc 2 – IA & Esprit critique',
+          'Comprendre que les IA ne donnent pas toutes les mêmes réponses et apprendre à choisir la meilleure.',
+          'Deux IA peuvent répondre très différemment à la même question ! Apprends à choisir la meilleure réponse.',
+          8, 40)
   returning id
 )
 insert into activities (session_id, title, type, duration_minutes, instructions, content, order_index, xp_reward)
 select s7.id, act.title, act.type, act.dur, act.instr, act.content::jsonb, act.ord, act.xp
 from s7, (values
-  ('Même question, réponses différentes', 'comparison', 10,
-   'Lis les 3 réponses et choisis la meilleure.',
-   '{"prompt":"Explique les volcans à un enfant de 10 ans.","responses":[{"id":"a","label":"IA A","text":"Les volcans sont des structures géologiques résultant de l''activité magmatique terrestre. La chambre magmatique accumule du magma qui, sous pression, remonte par une cheminée et s''éjecte en surface sous forme de lave, de cendres et de gaz."},{"id":"b","label":"IA B","text":"Un volcan c''est un trou dans la terre d''où sort de la lave. C''est chaud. Il y en a partout dans le monde. La lave peut tout brûler."},{"id":"c","label":"IA C","text":"Imagine que la Terre est comme une orange avec une peau. Sous cette peau, il y a de la roche tellement chaude qu''elle est liquide. Parfois, cette roche cherche à sortir. Elle pousse, pousse, et finalement elle sort par un trou qu''on appelle volcan. La roche liquide qui sort s''appelle la lave !"}],"best":"c","why":"La réponse C utilise une analogie (l''orange), des mots simples et raconte une histoire. C''est parfait pour un enfant !"}',
-   1, 20),
-  ('Comparer avec 4 critères', 'comparison', 8,
-   'Évalue chaque réponse selon 4 critères.',
-   '{"criteria":[{"id":"c1","label":"Clair","emoji":"💡","description":"Est-ce facile à comprendre ?"},{"id":"c2","label":"Exact","emoji":"✅","description":"Est-ce que c''est vrai et précis ?"},{"id":"c3","label":"Adapté","emoji":"🎯","description":"Est-ce adapté à mon niveau ?"},{"id":"c4","label":"Utile","emoji":"🛠️","description":"Est-ce que ça m''aide vraiment ?"}],"prompt":"Explique-moi la multiplication.","responses":[{"id":"r1","label":"Réponse A","text":"La multiplication est une opération arithmétique qui consiste en l''addition répétée d''un même nombre."},{"id":"r2","label":"Réponse B","text":"Multiplier, c''est comme additionner le même nombre plusieurs fois. Par exemple, 3×4 veut dire 3+3+3+3 = 12 ! Imagine 4 groupes de 3 pommes."}]}',
-   2, 20),
+  ('Même question, 3 réponses très différentes ! 😲', 'comparison', 10,
+   'Trois IA ont reçu la même question et ont répondu très différemment. Lis les 3 réponses et choisis la meilleure !',
+   '{"rounds":[{"id":"r1","prompt":"Explique les dinosaures à un enfant de 9 ans","responses":[{"id":"a","label":"IA Alfa","emoji":"🤖","text":"Les dinosaures sont des vertébrés tétrapodes qui ont dominé les écosystèmes terrestres du Trias supérieur au Crétacé supérieur, il y a environ 230 à 66 millions d''années."},{"id":"b","label":"IA Beta","emoji":"🤖","text":"Les dinosaures étaient des animaux. Ils vivaient avant. Maintenant ils sont morts."},{"id":"c","label":"IA Gamma","emoji":"🤖","text":"Les dinosaures, c''était des créatures géantes (et parfois minuscules !) qui vivaient il y a 66 millions d''années. Certains mangeaient de la viande comme le T-Rex, d''autres des plantes comme le Diplodocus. Une météorite les a fait disparaître — et leurs cousins vivent encore parmi nous : ce sont les oiseaux !"}],"best":"c","why":"Alfa utilise des mots trop compliqués. Beta est trop courte et ne dit rien d''intéressant. Gamma explique avec des exemples concrets et une info surprenante sur les oiseaux !"},{"id":"r2","prompt":"Comment fonctionne la pluie ?","responses":[{"id":"a","label":"IA Alfa","emoji":"🤖","text":"La précipitation résulte du cycle hydrologique : évaporation, condensation en altitude, puis précipitation sous forme de gouttes d''eau."},{"id":"b","label":"IA Beta","emoji":"🤖","text":"L''eau monte dans le ciel, ça fait des nuages, et après ça tombe."},{"id":"c","label":"IA Gamma","emoji":"🤖","text":"Imagine que l''eau des rivières monte invisible vers le ciel comme de la vapeur. Là-haut il fait froid, et la vapeur devient des gouttelettes qui forment des nuages. Quand le nuage est trop lourd… PSCHHHH, c''est la pluie ! Et ça recommence en boucle, comme un grand circuit."}],"best":"c","why":"Alfa est trop scientifique. Beta est trop courte. Gamma utilise des images simples (''monte invisible'', ''grand circuit'') et même un effet sonore — c''est vivant et facile à comprendre !"}]}',
+   1, 25),
+  ('Les 4 critères d''un bon juge ⭐', 'card', 5,
+   'Pour choisir la meilleure réponse d''une IA, voici les 4 questions à te poser !',
+   '{"title":"Les 4 critères du bon juge","subtitle":"Pose-toi ces 4 questions pour chaque réponse","criteria":[{"num":1,"emoji":"💡","label":"C''est clair ?","question":"Est-ce que je comprends facilement ?","good":"Oui, sans dictionnaire","bad":"Je dois chercher tous les mots"},{"num":2,"emoji":"🎯","label":"C''est pour moi ?","question":"Est-ce adapté à mon âge ?","good":"Des exemples de ma vie","bad":"Trop compliqué ou trop bébé"},{"num":3,"emoji":"✅","label":"C''est exact ?","question":"Est-ce que ça semble vrai ?","good":"Ça colle avec ce que je sais","bad":"Ça semble bizarre ou inventé"},{"num":4,"emoji":"🛠️","label":"C''est utile ?","question":"Est-ce que ça m''aide vraiment ?","good":"Je peux m''en servir","bad":"Trop vague ou hors sujet"}]}',
+   2, 15),
+  ('Vote pour la meilleure réponse ! 🗳️', 'drag_drop', 8,
+   'Lis les 2 réponses et glisse chaque étiquette vers la réponse qui lui correspond.',
+   '{"prompt":"Explique la multiplication à un enfant de 9 ans","responses":[{"id":"r1","label":"Réponse A 🤖","text":"La multiplication est une opération arithmétique binaire qui consiste à calculer le produit de deux facteurs entiers ou décimaux."},{"id":"r2","label":"Réponse B 🤖","text":"Multiplier, c''est comme additionner le même nombre plusieurs fois. Par exemple 3×4 veut dire 3+3+3+3 = 12 ! Imagine 4 groupes de 3 bonbons — tu en as 12 au total."}],"criteria_items":[{"id":"c1","label":"Facile à comprendre 💡","best":"r2"},{"id":"c2","label":"Adaptée à mon âge 🎯","best":"r2"},{"id":"c3","label":"Trop compliquée ❌","best":"r1"},{"id":"c4","label":"Donne un exemple concret ✨","best":"r2"},{"id":"c5","label":"Utilise des mots de dictionnaire ❌","best":"r1"}],"instruction":"Glisse chaque étiquette vers la réponse qui correspond !"}',
+   3, 25),
+  ('Crée ta meilleure question ! 🎙️', 'editor', 7,
+   'Maintenant que tu sais ce qu''est une bonne réponse, écris (ou dicte !) une question qui devrait donner une super réponse.',
+   '{"voice_enabled":true,"spelling_tolerance":true,"voice_tip":"Dicte ta question à voix haute avec le micro 🎙️ — c''est plus rapide !","spelling_note":"Pas besoin d''écrire parfaitement — l''IA comprend même avec des fautes 😊","tasks":[{"id":"q1","emoji":"🦁","label":"Sur un animal de ton choix","placeholder":"Explique-moi... avec des exemples rigolos pour un enfant de 9 ans","min_length":8},{"id":"q2","emoji":"🌍","label":"Sur quelque chose que tu veux savoir","placeholder":"J''aimerais comprendre... avec des mots simples","min_length":8}],"tip":"Rappelle-toi les 3 ingrédients : qui tu es + ce que tu veux + comment tu le veux !"}',
+   4, 20),
   ('Exercice clavier', 'typing', 5,
-   'Tape cette phrase pour terminer.',
-   '{"text":"Je compare les réponses avant de les utiliser.","target_wpm":18,"show_timer":false}',
-   3, 10)
+   'Tape cette phrase pour terminer la séance !',
+   '{"text":"Je choisis la réponse la plus claire et la plus utile.","target_wpm":18,"show_timer":false}',
+   5, 15)
 ) as act(title, type, dur, instr, content, ord, xp)
 on conflict do nothing;
 
 -- ============================================================
--- SESSION 8 – Esprit critique numérique
+-- SESSION 8 – Détective de l'info
 -- ============================================================
 with s8 as (
   insert into sessions (session_number, title, block_name, objective, description, order_index, estimated_duration_minutes)
-  values (9, 'Esprit critique numérique', 'Bloc 2 – IA & Esprit critique',
-          'Apprendre à vérifier une information.',
-          'Deviens un détective de l''information en ligne !',
-          9, 35)
+  values (9, 'Détective de l''info ! 🔍', 'Bloc 2 – IA & Esprit critique',
+          'Apprendre à repérer les fausses informations et à vérifier ce qu''on lit ou entend.',
+          'Sur Internet, tout le monde peut écrire n''importe quoi. Deviens un super détective pour démêler le vrai du faux !',
+          9, 40)
   returning id
 )
 insert into activities (session_id, title, type, duration_minutes, instructions, content, order_index, xp_reward)
 select s8.id, act.title, act.type, act.dur, act.instr, act.content::jsonb, act.ord, act.xp
 from s8, (values
-  ('Info vraie ou douteuse ?', 'quiz', 8,
-   'Pour chaque information, dis si elle te semble fiable ou douteuse.',
-   '{"questions":[{"id":"iv1","text":"Un article Wikipédia avec des sources citées en bas de page","emoji":"📖","options":["Plutôt fiable","Douteuse"],"correct":0,"explanation":"Wikipedia avec des sources est généralement fiable, mais vérifie toujours les sources citées."},{"id":"iv2","text":"Un post Facebook d''un inconnu qui dit que les vaccins rendent malade","emoji":"💉","options":["Plutôt fiable","Douteuse"],"correct":1,"explanation":"Méfiance ! Ce type d''info non sourcée sur les réseaux sociaux est souvent fausse."},{"id":"iv3","text":"Le site officiel d''une université sur un sujet scientifique","emoji":"🎓","options":["Plutôt fiable","Douteuse"],"correct":0,"explanation":"Les sites d''universités officielles sont généralement très fiables."},{"id":"iv4","text":"Une vidéo YouTube sans source qui dit une chose surprenante","emoji":"📺","options":["Plutôt fiable","Douteuse"],"correct":1,"explanation":"Sans source, une information surprenante doit être vérifiée ailleurs."}]}',
-   1, 20),
-  ('Les 4 questions de vérification', 'card', 5,
-   'Mémorise ces 4 questions pour vérifier n''importe quelle info.',
-   '{"title":"Les 4 questions du détective","questions":[{"num":1,"emoji":"👤","question":"Qui parle ?","detail":"Est-ce un expert, un journaliste, un inconnu ?"},{"num":2,"emoji":"📍","question":"D''où vient l''info ?","detail":"Un site officiel, un blog, un réseau social ?"},{"num":3,"emoji":"📅","question":"Est-ce récent ?","detail":"Une information vieille peut être dépassée."},{"num":4,"emoji":"🔄","question":"Est-ce confirmé ailleurs ?","detail":"Si une seule source le dit, méfiance !"}]}',
-   2, 10),
-  ('Vérifier une réponse d''IA', 'quiz', 10,
-   'Lis cette réponse d''IA et repère l''erreur qui s''est glissée dedans.',
-   '{"context":"Une IA répond à la question : Qui a peint la Joconde ?","ai_response":"La Joconde a été peinte par Michel-Ange entre 1503 et 1519. C''est l''un des tableaux les plus célèbres du monde, exposé au Louvre à Paris. Le tableau mesure 77 cm × 53 cm et représente une femme mystérieuse avec un sourire énigmatique.","questions":[{"id":"err1","text":"Qui a vraiment peint la Joconde ?","options":["Michel-Ange","Léonard de Vinci","Raphaël","Botticelli"],"correct":1,"explanation":"Erreur de l''IA ! C''est Léonard de Vinci qui a peint la Joconde, pas Michel-Ange. Voilà pourquoi on vérifie toujours !"}]}',
-   3, 20),
+  ('Vrai ou Fake ? Le jeu ! 🎭', 'quiz', 8,
+   'Pour chaque situation, dis si l''info te semble fiable ou suspecte. Des exemples tirés de ta vraie vie !',
+   '{"questions":[{"id":"vf1","text":"Un copain à l''école dit que les araignées sont des insectes","emoji":"🕷️","options":["Je le crois sans vérifier","Je vérifie, c''est peut-être faux"],"correct":1,"explanation":"Bonne idée de vérifier ! Les araignées sont des arachnides, pas des insectes. Les insectes ont 6 pattes, les araignées en ont 8. Même un copain peut se tromper !"},{"id":"vf2","text":"Une vidéo TikTok dit ''les dauphins dorment avec un œil ouvert'' mais sans aucune source","emoji":"🐬","options":["C''est forcément vrai si c''est sur TikTok","Je vérifie avant de le redire"],"correct":1,"explanation":"Bien joué ! Sur TikTok, n''importe qui peut poster n''importe quoi sans preuve. (Et d''ailleurs, c''est vrai pour les dauphins — mais tu ne pouvais pas le savoir sans vérifier !)"},{"id":"vf3","text":"Le site du Muséum National d''Histoire Naturelle explique comment vivent les T-Rex","emoji":"🦖","options":["Fiable ✅","Méfiance ⚠️"],"correct":0,"explanation":"Un musée national avec des scientifiques, c''est une source très fiable pour les infos sur la nature et les animaux !"},{"id":"vf4","text":"Un message reçu dit ''URGENCE partage ça à 10 personnes ou malheur !''","emoji":"📲","options":["Fiable ✅","C''est sûrement une arnaque ⚠️"],"correct":1,"explanation":"Ces messages s''appellent des chaînes. C''est presque toujours une fausse info ou une blague. On ne partage jamais ça !"},{"id":"vf5","text":"Ton professeur t''explique quelque chose en classe","emoji":"👩‍🏫","options":["Fiable ✅","Méfiance ⚠️"],"correct":0,"explanation":"Ton professeur est un expert qui a vérifié ses informations. C''est une source très fiable !"},{"id":"vf6","text":"Un commentaire YouTube dit ''les requins n''ont jamais attaqué de personnes''","emoji":"🦈","options":["Fiable ✅","Méfiance ⚠️"],"correct":1,"explanation":"Un commentaire YouTube, c''est n''importe qui ! Et cette info est fausse — les attaques de requins existent, même si elles sont très rares."}]}',
+   1, 25),
+  ('Trie tes sources ! 📊', 'drag_drop', 7,
+   'Glisse chaque source dans la bonne case : très fiable ✅, à vérifier 🤔, ou méfiance ❌',
+   '{"categories":[{"id":"trust","label":"Très fiable ✅","color":"green"},{"id":"check","label":"À vérifier 🤔","color":"yellow"},{"id":"doubt","label":"Méfiance ❌","color":"red"}],"items":[{"id":"s1","label":"Site officiel d''un musée","category":"trust","emoji":"🏛️"},{"id":"s2","label":"Commentaire anonyme YouTube","category":"doubt","emoji":"💬"},{"id":"s3","label":"Wikipédia avec sources citées","category":"check","emoji":"📖"},{"id":"s4","label":"Ton professeur","category":"trust","emoji":"👩‍🏫"},{"id":"s5","label":"Message ''urgence partage vite !''","category":"doubt","emoji":"📲"},{"id":"s6","label":"Site du gouvernement","category":"trust","emoji":"🏛️"},{"id":"s7","label":"Un copain qui a ''entendu dire''","category":"check","emoji":"🗣️"},{"id":"s8","label":"Blog sans auteur ni date","category":"doubt","emoji":"📝"}],"shuffle":true}',
+   2, 25),
+  ('Les 4 questions du détective 🕵️', 'card', 5,
+   'Mémorise ces 4 questions magiques. Avec elles, tu peux vérifier n''importe quelle info !',
+   '{"title":"Les 4 questions du détective","subtitle":"Pose-toi ces questions avant de croire ou de partager","questions":[{"num":1,"emoji":"👤","question":"Qui parle ?","detail":"Un expert, un journaliste, un inconnu ?","example":"Un médecin parle de santé = fiable. Un inconnu sur TikTok = à vérifier."},{"num":2,"emoji":"📍","question":"D''où vient l''info ?","detail":"Site officiel, journal reconnu, réseau social ?","example":"Le site de la NASA pour l''espace = fiable. Un blog sans nom = méfiance."},{"num":3,"emoji":"📅","question":"Est-ce récent ?","detail":"Une vieille info peut ne plus être vraie.","example":"Un article sur les téléphones de 2005 parle d''une autre époque !"},{"num":4,"emoji":"🔄","question":"D''autres sources disent pareil ?","detail":"Si une seule personne le dit, méfiance !","example":"Si 5 journaux différents disent la même chose, c''est probablement vrai."}]}',
+   3, 10),
+  ('L''IA a dit 3 bêtises ! 🐛', 'quiz', 10,
+   'Une IA a répondu à des questions, mais elle a fait 3 erreurs ! Sauras-tu les trouver ? Lis bien et repère ce qui cloche.',
+   '{"intro":"Une IA peut inventer des infos qui semblent vraies. C''est pour ça qu''on vérifie toujours !","errors":[{"id":"e1","context":"Une IA répond à : Qui a peint la Joconde ?","ai_response":"La Joconde a été peinte par Michel-Ange entre 1503 et 1519. C''est le tableau le plus célèbre du monde, exposé au Louvre à Paris.","question":"Qui a vraiment peint la Joconde ?","options":["Michel-Ange","Léonard de Vinci","Raphaël","Picasso"],"correct":1,"explanation":"L''IA a inventé ! C''est Léonard de Vinci qui a peint la Joconde. Michel-Ange, lui, a peint le plafond de la Chapelle Sixtine. Deux artistes différents !"},{"id":"e2","context":"Une IA répond à : Combien de pattes a une araignée ?","ai_response":"Les araignées ont 6 pattes, comme tous les insectes. Elles font partie de la famille des insectes arthropodes.","question":"Combien de pattes a vraiment une araignée ?","options":["4 pattes","6 pattes","8 pattes","10 pattes"],"correct":2,"explanation":"Double erreur ! Les araignées ont 8 pattes et ne sont PAS des insectes — ce sont des arachnides. Les insectes ont 6 pattes. L''IA a tout mélangé !"},{"id":"e3","context":"Une IA répond à : Quelle est la capitale de l''Australie ?","ai_response":"La capitale de l''Australie est Sydney. C''est la plus grande ville du pays, connue pour son opéra et son port magnifique.","question":"Quelle est vraiment la capitale de l''Australie ?","options":["Sydney","Melbourne","Canberra","Brisbane"],"correct":2,"explanation":"L''IA a confondu la ville la plus célèbre avec la capitale ! La capitale de l''Australie est Canberra. Une erreur très courante même chez les humains !"}]}',
+   4, 30),
+  ('Ma règle d''or 🥇', 'editor', 5,
+   'En 1 phrase (dictée ou écrite !), dis ce que TU vas faire la prochaine fois que tu lis une info surprenante.',
+   '{"voice_enabled":true,"spelling_tolerance":true,"voice_tip":"Dicte ta règle à voix haute 🎙️ — c''est ta règle personnelle !","spelling_note":"Écris avec tes propres mots, même avec des fautes 😊","tasks":[{"id":"r1","emoji":"🥇","label":"Ma règle perso de détective","placeholder":"La prochaine fois que je lis quelque chose de bizarre, je vais...","starter":"La prochaine fois","min_length":8}],"examples":["La prochaine fois je vais demander à un adulte avant de croire","La prochaine fois je vais chercher sur un autre site","La prochaine fois je vais voir si mon prof dit la même chose"]}',
+   5, 15),
   ('Exercice clavier', 'typing', 5,
-   'Tape cette phrase pour terminer.',
-   '{"text":"Je vérifie avant de croire.","target_wpm":18,"show_timer":false}',
-   4, 10)
+   'Tape cette phrase pour finir la séance !',
+   '{"text":"Je vérifie toujours avant de croire ou de partager.","target_wpm":18,"show_timer":false}',
+   6, 10)
 ) as act(title, type, dur, instr, content, ord, xp)
 on conflict do nothing;
 

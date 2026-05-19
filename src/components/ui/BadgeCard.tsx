@@ -1,8 +1,8 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import type { Badge } from '@/types'
 import { motion } from 'framer-motion'
+import type { Badge } from '@/types'
 
 interface BadgeCardProps {
   badge: Badge
@@ -21,26 +21,24 @@ export function BadgeCard({ badge, unlocked = false, unlockedAt, size = 'md' }: 
 
   return (
     <motion.div
+      whileHover={unlocked ? { scale: 1.08, y: -4 } : undefined}
+      whileTap={unlocked ? { scale: 0.95 } : undefined}
+      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
       className={cn(
         'flex flex-col items-center text-center rounded-2xl border-2 transition-all duration-300',
         s.card,
         unlocked
-          ? 'bg-white border-lumi-yellow shadow-md cursor-pointer'
-          : 'bg-gray-50 border-gray-200 opacity-50 grayscale'
+          ? 'bg-white dark:bg-slate-800 border-lumi-yellow dark:border-lumi-yellow/60 shadow-md dark:shadow-card-dark'
+          : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 opacity-40 grayscale'
       )}
-      whileHover={unlocked ? { scale: 1.08, y: -4 } : undefined}
-      whileTap={unlocked ? { scale: 0.95 } : undefined}
-      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
     >
       <div className={cn(s.icon, !unlocked && 'opacity-40')}>{badge.icon}</div>
-      <div className={cn('font-bold text-lumi-text', s.name)}>{badge.name}</div>
+      <div className={cn('font-black text-lumi-text dark:text-slate-100', s.name)}>{badge.name}</div>
       {size !== 'sm' && (
-        <div className={cn('text-lumi-muted leading-tight', s.desc)}>{badge.description}</div>
+        <div className={cn('text-lumi-muted dark:text-slate-400 leading-tight', s.desc)}>{badge.description}</div>
       )}
       {unlocked && unlockedAt && size === 'lg' && (
-        <div className="text-xs text-lumi-green font-semibold mt-1">
-          ✓ Débloqué !
-        </div>
+        <div className="text-xs text-lumi-green font-bold mt-1">✓ Débloqué !</div>
       )}
     </motion.div>
   )

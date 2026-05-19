@@ -26,18 +26,18 @@ export function XPBar({ xp, className, compact = false }: XPBarProps) {
             transition={{ duration: 1, ease: 'easeOut' }}
           />
         </div>
-        <span className="text-xs text-lumi-muted">{xp} XP</span>
+        <span className="text-xs text-lumi-muted dark:text-slate-400 font-semibold">{xp} XP</span>
       </div>
     )
   }
 
   return (
-    <div className={cn('space-y-1', className)}>
+    <div className={cn('space-y-1.5', className)}>
       <div className="flex justify-between items-center">
-        <span className="text-sm font-bold text-lumi-purple">
+        <span className="text-sm font-black text-lumi-purple dark:text-lumi-purple">
           Niveau {level.level} — {level.name}
         </span>
-        <span className="text-sm text-lumi-muted font-semibold">{xp} XP</span>
+        <span className="text-sm text-lumi-muted dark:text-slate-400 font-semibold">{xp} XP</span>
       </div>
       <div className="h-4 bg-lumi-purple-light rounded-full overflow-hidden">
         <motion.div
@@ -47,7 +47,7 @@ export function XPBar({ xp, className, compact = false }: XPBarProps) {
           transition={{ duration: 1.2, ease: 'easeOut' }}
         />
       </div>
-      <div className="flex justify-between text-xs text-lumi-muted">
+      <div className="flex justify-between text-xs text-lumi-muted dark:text-slate-500">
         <span>{level.minXp} XP</span>
         <span>{percent}% vers niveau {Math.min(level.level + 1, 5)}</span>
         <span>{level.maxXp} XP</span>

@@ -34,15 +34,12 @@ export default function EleveDashboard() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-
       const [profileRes, badgesRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         supabase.from('badges').select('*').order('condition_value'),
       ])
-
       setProfile(profileRes.data)
       setAllBadges(badgesRes.data ?? [])
-
       if (profileRes.data?.role === 'student') {
         const { data: stu } = await supabase
           .from('students')
@@ -60,7 +57,6 @@ export default function EleveDashboard() {
           setCommentedProgress((progRes.data ?? []).filter(p => p.teacher_comment) as (StudentActivityProgress & { teacher_comment: string })[])
         }
       }
-
       setLoading(false)
     }
     load()
@@ -71,10 +67,7 @@ export default function EleveDashboard() {
       <RoleGuard allowedRoles={['student']}>
         <StudentLayout>
           <div className="flex items-center justify-center h-64">
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 border-4 border-lumi-blue border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-lumi-muted font-semibold">Chargement…</p>
-            </div>
+            <div className="w-12 h-12 border-4 border-lumi-purple border-t-transparent rounded-full animate-spin" />
           </div>
         </StudentLayout>
       </RoleGuard>
@@ -199,23 +192,32 @@ export default function EleveDashboard() {
 
           {/* Stats */}
           <motion.div variants={stagger.item}>
-          <Card>
-            <h2 className="text-xl font-black text-lumi-text mb-4">Mes statistiques</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-3xl font-black text-lumi-blue">{student?.level ?? 1}</div>
-                <div className="text-xs text-lumi-muted font-semibold mt-1">Niveau</div>
+            <Card>
+              <h2 className="text-xl font-black text-lumi-text dark:text-slate-100 mb-4">Mes stats 📊</h2>
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { value: student?.level ?? 1, label: 'Niveau', color: 'text-lumi-blue' },
+                  { value: unlockedBadgeIds.size, label: 'Badges', color: 'text-lumi-green' },
+                  { value: xp, label: 'XP Total', color: 'text-lumi-purple' },
+                ].map(stat => (
+                  <motion.div
+                    key={stat.label}
+                    whileHover={{ scale: 1.05 }}
+                    className="text-center p-3 rounded-2xl bg-lumi-cream dark:bg-slate-800 border border-slate-100 dark:border-slate-700"
+                  >
+                    <motion.div
+                      className={`text-3xl font-black ${stat.color}`}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5, type: 'spring' }}
+                    >
+                      {stat.value}
+                    </motion.div>
+                    <div className="text-xs text-lumi-muted dark:text-slate-400 font-bold mt-1">{stat.label}</div>
+                  </motion.div>
+                ))}
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-black text-lumi-green">{unlockedBadgeIds.size}</div>
-                <div className="text-xs text-lumi-muted font-semibold mt-1">Badges</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-black text-lumi-purple">{xp}</div>
-                <div className="text-xs text-lumi-muted font-semibold mt-1">XP Total</div>
-              </div>
-            </div>
-          </Card>
+            </Card>
           </motion.div>
         </motion.div>
       </StudentLayout>
