@@ -2,6 +2,7 @@
 
 import { getLevelForXp, getXpProgress } from '@/types'
 import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
 
 interface XPBarProps {
   xp: number
@@ -18,9 +19,11 @@ export function XPBar({ xp, className, compact = false }: XPBarProps) {
       <div className={cn('flex items-center gap-2', className)}>
         <span className="text-xs font-bold text-lumi-purple">Niv.{level.level}</span>
         <div className="flex-1 h-2 bg-lumi-purple-light rounded-full overflow-hidden">
-          <div
-            className="h-full bg-lumi-purple rounded-full transition-all duration-700"
-            style={{ width: `${percent}%` }}
+          <motion.div
+            className="h-full bg-gradient-to-r from-lumi-purple to-lumi-blue rounded-full xp-glow"
+            initial={{ width: 0 }}
+            animate={{ width: `${percent}%` }}
+            transition={{ duration: 1, ease: 'easeOut' }}
           />
         </div>
         <span className="text-xs text-lumi-muted">{xp} XP</span>
@@ -37,9 +40,11 @@ export function XPBar({ xp, className, compact = false }: XPBarProps) {
         <span className="text-sm text-lumi-muted font-semibold">{xp} XP</span>
       </div>
       <div className="h-4 bg-lumi-purple-light rounded-full overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-lumi-purple to-lumi-blue rounded-full transition-all duration-1000 ease-out"
-          style={{ width: `${percent}%` }}
+        <motion.div
+          className="h-full bg-gradient-to-r from-lumi-purple via-lumi-blue to-cyan-400 rounded-full xp-glow"
+          initial={{ width: 0 }}
+          animate={{ width: `${percent}%` }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
         />
       </div>
       <div className="flex justify-between text-xs text-lumi-muted">

@@ -24,6 +24,9 @@ export default function SeancePage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showActivity, setShowActivity] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [allSessions, setAllSessions] = useState<{ id: string; activities: { id: string }[] }[]>([])
+  const [allBadges, setAllBadges] = useState<{ id: string; condition_type: string; condition_value: number; name: string; icon: string }[]>([])
+  const [earnedBadgeIds, setEarnedBadgeIds] = useState<Set<string>>(new Set())
   const supabase = createClient()
 
   useEffect(() => {
@@ -31,10 +34,14 @@ export default function SeancePage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      const [sessionRes, stuRes] = await Promise.all([
+      const [sessionRes, stuRes, allSessRes, badgesRes] = await Promise.all([
         supabase.from('sessions').select('*, activities(*)').eq('id', id).single(),
         supabase.from('students').select('*').eq('profile_id', user.id).single(),
+        supabase.from('sessions').select('id, activities(id)').order('order_index'),
+        supabase.from('badges').select('id, condition_type, condition_value, name, icon'),
       ])
+      setAllSessions(allSessRes.data ?? [])
+      setAllBadges(badgesRes.data ?? [])
 
       const sess = sessionRes.data
       setSession(sess)
@@ -43,16 +50,18 @@ export default function SeancePage() {
       setStudent(stuRes.data)
 
       if (stuRes.data) {
-        const { data: prog } = await supabase
-          .from('student_activity_progress')
-          .select('*')
-          .eq('student_id', stuRes.data.id)
+        const [progRes, earnedRes] = await Promise.all([
+          supabase.from('student_activity_progress').select('*').eq('student_id', stuRes.data.id),
+          supabase.from('student_badges').select('badge_id').eq('student_id', stuRes.data.id),
+        ])
 
-        setProgress(prog ?? [])
+        const prog = progRes.data ?? []
+        setProgress(prog)
+        setEarnedBadgeIds(new Set((earnedRes.data ?? []).map((b: { badge_id: string }) => b.badge_id)))
 
         // Find first not-completed activity
         const firstUndone = acts.findIndex((a: Activity) =>
-          !(prog ?? []).find((p: StudentActivityProgress) => p.activity_id === a.id && p.status === 'completed')
+          !prog.find((p: StudentActivityProgress) => p.activity_id === a.id && p.status === 'completed')
         )
         setCurrentIndex(firstUndone === -1 ? acts.length - 1 : firstUndone)
 
@@ -68,7 +77,7 @@ export default function SeancePage() {
   const isCompleted = (actId: string) =>
     progress.some(p => p.activity_id === actId && p.status === 'completed')
 
-  const handleActivityComplete = async (score: number, timeSpent?: number) => {
+  const handleActivityComplete = async (score: number, timeSpent?: number, data?: Record<string, unknown>) => {
     if (!student || !activities[currentIndex]) return
     const activity = activities[currentIndex]
 
@@ -81,6 +90,7 @@ export default function SeancePage() {
         attempts: existing.attempts + 1,
         time_spent_seconds: (existing.time_spent_seconds ?? 0) + (timeSpent ?? 0),
         completed_at: new Date().toISOString(),
+        answer_data: data ?? existing.answer_data ?? null,
       }).eq('id', existing.id)
     } else {
       await supabase.from('student_activity_progress').insert({
@@ -91,6 +101,7 @@ export default function SeancePage() {
         attempts: 1,
         time_spent_seconds: timeSpent ?? 0,
         completed_at: new Date().toISOString(),
+        answer_data: data ?? null,
       })
 
       // Award XP
@@ -106,8 +117,36 @@ export default function SeancePage() {
       .from('student_activity_progress')
       .select('*')
       .eq('student_id', student.id)
-    setProgress(newProg ?? [])
-    setShowActivity(false)
+    const updatedProg = newProg ?? []
+    setProgress(updatedProg)
+
+    // Badge checking (only on first completion)
+    if (!existing) {
+      const newXp = student.xp + activity.xp_reward
+      const completedActivityCount = updatedProg.filter(p => p.status === 'completed').length
+
+      const completedSessionsCount = allSessions.filter(s =>
+        (s.activities ?? []).length > 0 &&
+        (s.activities ?? []).every(a => updatedProg.some(p => p.activity_id === a.id && p.status === 'completed'))
+      ).length
+
+      const newBadges = allBadges.filter(badge => {
+        if (earnedBadgeIds.has(badge.id)) return false
+        if (badge.condition_type === 'first_activity') return completedActivityCount >= 1
+        if (badge.condition_type === 'sessions_completed') return completedSessionsCount >= badge.condition_value
+        if (badge.condition_type === 'xp_reached') return newXp >= badge.condition_value
+        if (badge.condition_type === 'project_done') return activity.type === 'project_step'
+        return false
+      })
+
+      if (newBadges.length > 0) {
+        await supabase.from('student_badges').insert(
+          newBadges.map(b => ({ student_id: student.id, badge_id: b.id }))
+        )
+        setEarnedBadgeIds(prev => new Set([...prev, ...newBadges.map(b => b.id)]))
+        newBadges.forEach(b => toast.success(`${b.icon} Badge débloqué : ${b.name} !`, { duration: 5000 }))
+      }
+    }
   }
 
   const handleNext = () => {

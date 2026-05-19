@@ -7,7 +7,8 @@ import { cn } from '@/lib/utils'
 
 interface DragItem {
   id: string
-  label: string
+  label?: string
+  name?: string
   emoji?: string
   target?: string
   correct_folder?: string
@@ -115,7 +116,7 @@ export function DragDropExercise({ content, xpReward, onComplete }: DragDropExer
                 )}
               >
                 {item.emoji && <span className="mr-1">{item.emoji}</span>}
-                {item.label ?? (item as { name?: string }).name ?? item.id}
+                {item.label ?? item.name ?? item.id}
               </button>
             ))}
           </div>
@@ -161,7 +162,7 @@ export function DragDropExercise({ content, xpReward, onComplete }: DragDropExer
                     className="px-2 py-1 bg-white rounded-lg text-xs font-semibold border border-lumi-green text-green-700 hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-colors"
                     title="Cliquer pour retirer"
                   >
-                    {item.label ?? (item as { name?: string }).name ?? item.id} ×
+                    {item.label ?? item.name ?? item.id} ×
                   </button>
                 ))}
               </div>

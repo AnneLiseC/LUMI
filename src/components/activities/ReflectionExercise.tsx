@@ -8,12 +8,15 @@ interface ReflectionContent {
   prompts?: string[]
   tasks?: { id: string; label: string; placeholder?: string }[]
   min_length?: number
+  min_words?: number
 }
+
+const countWords = (text: string) => text.trim().split(/\s+/).filter(w => w.length > 0).length
 
 interface ReflectionExerciseProps {
   content: ReflectionContent
   xpReward: number
-  onComplete: (score: number) => void
+  onComplete: (score: number, data?: Record<string, unknown>) => void
   type?: 'reflection' | 'editor'
 }
 
@@ -21,13 +24,15 @@ export function ReflectionExercise({ content, xpReward, onComplete, type = 'refl
   const prompts = content.prompts ?? content.tasks?.map(t => t.label) ?? []
   const [answers, setAnswers] = useState<string[]>(new Array(prompts.length).fill(''))
   const [submitted, setSubmitted] = useState(false)
-  const minLength = content.min_length ?? 10
+  const minWords = content.min_words ?? Math.ceil((content.min_length ?? 50) / 5)
 
-  const allFilled = answers.every(a => a.trim().length >= minLength)
+  const allFilled = answers.every(a => countWords(a) >= minWords)
 
   const handleSubmit = () => {
     setSubmitted(true)
-    onComplete(100)
+    const answerData: Record<string, unknown> = {}
+    prompts.forEach((prompt, i) => { answerData[`q${i}`] = { prompt, answer: answers[i] } })
+    onComplete(100, { answers: answerData })
   }
 
   if (submitted) {
@@ -70,11 +75,11 @@ export function ReflectionExercise({ content, xpReward, onComplete, type = 'refl
           />
           <div className="flex justify-between text-xs text-lumi-muted">
             <span>
-              {answers[i].trim().length < minLength
-                ? `Encore ${minLength - answers[i].trim().length} caractères minimum`
+              {countWords(answers[i]) < minWords
+                ? `Encore ${minWords - countWords(answers[i])} mot${minWords - countWords(answers[i]) > 1 ? 's' : ''} minimum`
                 : '✓ C\'est bien !'}
             </span>
-            <span>{answers[i].length} caractères</span>
+            <span>{countWords(answers[i])} mot{countWords(answers[i]) > 1 ? 's' : ''}</span>
           </div>
         </div>
       ))}
@@ -85,7 +90,7 @@ export function ReflectionExercise({ content, xpReward, onComplete, type = 'refl
 
       {!allFilled && (
         <p className="text-center text-sm text-lumi-muted">
-          💡 Écris au moins {minLength} caractères pour chaque réponse.
+          💡 Écris au moins {minWords} mots pour chaque réponse.
         </p>
       )}
     </div>

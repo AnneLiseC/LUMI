@@ -25,6 +25,7 @@ export function TypingExercise({ content, xpReward, onComplete }: TypingExercise
   const [elapsed, setElapsed] = useState(0)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const timerRef = useRef<NodeJS.Timeout>()
+  const elapsedRef = useRef(0)
 
   const target = content.text
   const words = target.split(' ').length
@@ -42,7 +43,7 @@ export function TypingExercise({ content, xpReward, onComplete }: TypingExercise
 
   useEffect(() => {
     if (started && !finished) {
-      timerRef.current = setInterval(() => setElapsed(e => e + 1), 1000)
+      timerRef.current = setInterval(() => setElapsed(e => { elapsedRef.current = e + 1; return e + 1 }), 1000)
     }
     return () => clearInterval(timerRef.current)
   }, [started, finished])
@@ -52,8 +53,9 @@ export function TypingExercise({ content, xpReward, onComplete }: TypingExercise
       clearInterval(timerRef.current)
       setFinished(true)
       const { accuracy } = calculateStats()
-      onComplete(accuracy, elapsed)
+      onComplete(accuracy, elapsedRef.current)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typed, target])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
