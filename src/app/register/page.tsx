@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import type { UserRole } from '@/types'
-import { motion } from 'framer-motion'
 
 const ROLES: { value: UserRole; label: string; emoji: string; description: string }[] = [
   { value: 'student', label: 'Élève', emoji: '🧒', description: "J'apprends avec LUMI" },

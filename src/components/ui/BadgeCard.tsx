@@ -3,7 +3,6 @@
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import type { Badge } from '@/types'
-import { motion } from 'framer-motion'
 
 interface BadgeCardProps {
   badge: Badge
@@ -22,8 +21,9 @@ export function BadgeCard({ badge, unlocked = false, unlockedAt, size = 'md' }: 
 
   return (
     <motion.div
-      whileHover={unlocked ? { y: -4, scale: 1.04 } : {}}
-      transition={{ type: 'spring', stiffness: 300 }}
+      whileHover={unlocked ? { scale: 1.08, y: -4 } : undefined}
+      whileTap={unlocked ? { scale: 0.95 } : undefined}
+      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
       className={cn(
         'flex flex-col items-center text-center rounded-2xl border-2 transition-all duration-300',
         s.card,
@@ -31,9 +31,6 @@ export function BadgeCard({ badge, unlocked = false, unlockedAt, size = 'md' }: 
           ? 'bg-white dark:bg-slate-800 border-lumi-yellow dark:border-lumi-yellow/60 shadow-md dark:shadow-card-dark'
           : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 opacity-40 grayscale'
       )}
-      whileHover={unlocked ? { scale: 1.08, y: -4 } : undefined}
-      whileTap={unlocked ? { scale: 0.95 } : undefined}
-      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
     >
       <div className={cn(s.icon, !unlocked && 'opacity-40')}>{badge.icon}</div>
       <div className={cn('font-black text-lumi-text dark:text-slate-100', s.name)}>{badge.name}</div>

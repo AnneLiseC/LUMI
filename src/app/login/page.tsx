@@ -124,8 +124,8 @@ export default function LoginPage() {
               { label: '⚙️ Admin', email: 'admin@lumi.app', password: 'Lumi2024!' },
             ].map(a => (
               <button
-                key={account.email}
-                onClick={() => fillDemo(account.email, account.password)}
+                key={a.email}
+                onClick={() => fillDemo(a.email, a.password)}
                 className="text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-lumi-blue hover:bg-lumi-blue-light dark:hover:bg-blue-950 transition-all text-left"
               >
                 <span className="block font-black">{a.label}</span>

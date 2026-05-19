@@ -6,10 +6,9 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { LogOut, Users, BookOpen, BarChart3, Settings, GraduationCap, Menu, X } from 'lucide-react'
+import { LogOut, Users, BookOpen, BarChart3, Settings, GraduationCap, Menu, X, TrendingUp } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -137,7 +136,7 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
           </button>
           <ThemeToggle />
         </div>
-      </header>
+      </aside>
 
       {/* Mobile header — hidden on lg */}
       <header className="lg:hidden sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800">

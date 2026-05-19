@@ -192,23 +192,6 @@ export default function EleveDashboard() {
 
           {/* Stats */}
           <motion.div variants={stagger.item}>
-          <Card>
-            <h2 className="text-xl font-black text-lumi-text mb-4">Mes statistiques</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-3xl font-black text-lumi-blue">{student?.level ?? 1}</div>
-                <div className="text-xs text-lumi-muted font-semibold mt-1">Niveau</div>
-              </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                {allBadges.map(badge => (
-                  <BadgeCard key={badge.id} badge={badge} unlocked={unlockedBadgeIds.has(badge.id)} size="sm" />
-                ))}
-              </div>
-            </Card>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div variants={stagger.item}>
             <Card>
               <h2 className="text-xl font-black text-lumi-text dark:text-slate-100 mb-4">Mes stats 📊</h2>
               <div className="grid grid-cols-3 gap-4">
@@ -234,8 +217,7 @@ export default function EleveDashboard() {
                   </motion.div>
                 ))}
               </div>
-            </div>
-          </Card>
+            </Card>
           </motion.div>
         </motion.div>
       </StudentLayout>
