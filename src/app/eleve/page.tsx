@@ -10,14 +10,23 @@ import { Card } from '@/components/ui/Card'
 import { useStudentData } from '@/hooks/useStudentData'
 import Link from 'next/link'
 import { getLevelForXp } from '@/types'
+import type { Student, Profile, Badge, StudentBadge, Assessment, StudentActivityProgress } from '@/types'
 import { motion } from 'framer-motion'
-import { stagger } from '@/components/ui/PageWrapper'
-import type { Student, Profile, Badge, StudentBadge } from '@/types'
+
+const stagger = {
+  container: { animate: { transition: { staggerChildren: 0.1 } } },
+  item: {
+    initial: { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  },
+}
 
 export default function EleveDashboard() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [student, setStudent] = useState<Student | null>(null)
   const [allBadges, setAllBadges] = useState<Badge[]>([])
+  const [latestAssessment, setLatestAssessment] = useState<Assessment | null>(null)
+  const [commentedProgress, setCommentedProgress] = useState<(StudentActivityProgress & { teacher_comment: string })[]>([])
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
@@ -38,6 +47,15 @@ export default function EleveDashboard() {
           .eq('profile_id', user.id)
           .single()
         setStudent(stu)
+
+        if (stu) {
+          const [assessRes, progRes] = await Promise.all([
+            supabase.from('assessments').select('*').eq('student_id', stu.id).order('created_at', { ascending: false }).limit(1),
+            supabase.from('student_activity_progress').select('id, activity_id, teacher_comment').eq('student_id', stu.id).not('teacher_comment', 'is', null),
+          ])
+          setLatestAssessment(assessRes.data?.[0] ?? null)
+          setCommentedProgress((progRes.data ?? []).filter(p => p.teacher_comment) as (StudentActivityProgress & { teacher_comment: string })[])
+        }
       }
       setLoading(false)
     }
@@ -65,94 +83,121 @@ export default function EleveDashboard() {
     <RoleGuard allowedRoles={['student']}>
       <StudentLayout student={student ?? undefined}>
         <motion.div
+          className="space-y-6"
           variants={stagger.container}
-          initial="hidden"
-          animate="show"
-          className="space-y-5"
+          initial="initial"
+          animate="animate"
         >
-          {/* Welcome hero */}
-          <motion.div variants={stagger.item}>
-            <div className="relative rounded-3xl p-6 overflow-hidden text-white"
-              style={{ background: 'linear-gradient(135deg, #A78BFA 0%, #6C9FFF 50%, #22D3EE 100%)' }}>
-              <div className="absolute inset-0 bg-black/5" />
-              {/* Decorative blobs */}
-              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 blur-xl" />
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-white/10 blur-xl" />
-              <div className="relative flex items-start gap-4">
-                <motion.div
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-4xl flex-shrink-0"
-                >
-                  ⭐
-                </motion.div>
-                <div className="flex-1">
-                  <h1 className="text-2xl font-black tracking-tight">
-                    Bonjour, {profile?.first_name || 'Champion'} ! 👋
-                  </h1>
-                  <p className="opacity-90 font-semibold text-sm mt-0.5">
-                    Niveau {level.level} — {level.name}
-                  </p>
-                  <div className="mt-4">
-                    <XPBar xp={xp} className="[&>div:first-child]:text-white [&>span]:text-white/80" />
-                  </div>
-                </div>
+          {/* Welcome */}
+          <motion.div variants={stagger.item} className="bg-gradient-to-r from-lumi-blue to-lumi-purple rounded-3xl p-6 text-white">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl">
+                ⭐
               </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-black">
+                  Bonjour, {profile?.first_name || 'Champion'} ! 👋
+                </h1>
+                <p className="opacity-90 font-semibold">
+                  Niveau {level.level} — {level.name}
+                </p>
+                <p className="opacity-75 text-sm mt-0.5">
+                  Continue comme ça, tu avances !
+                </p>
+              </div>
+            </div>
+            <div className="mt-5">
+              <XPBar xp={xp} className="[&>div]:bg-white/20 [&_*]:!text-white [&_.bg-gradient-to-r]:opacity-80" />
             </div>
           </motion.div>
 
           {/* Quick actions */}
           <motion.div variants={stagger.item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              {
-                href: '/eleve/parcours', emoji: '🗺️', label: 'Mon parcours',
-                sub: 'Voir toutes les séances',
-                gradient: 'from-lumi-blue/15 to-lumi-blue/5',
-                border: 'border-lumi-blue/30 hover:border-lumi-blue',
-                text: 'text-lumi-blue',
-              },
-              {
-                href: '/eleve/projet', emoji: '🏆', label: 'Mon projet',
-                sub: 'Assistant de devoirs',
-                gradient: 'from-lumi-purple/15 to-lumi-purple/5',
-                border: 'border-lumi-purple/30 hover:border-lumi-purple',
-                text: 'text-lumi-purple',
-              },
-              {
-                href: '#', emoji: '⭐', label: `${xp} XP`,
-                sub: 'Points gagnés',
-                gradient: 'from-lumi-yellow/20 to-lumi-yellow/5',
-                border: 'border-lumi-yellow/40 hover:border-lumi-yellow',
-                text: 'text-amber-600 dark:text-lumi-yellow',
-              },
-            ].map((item, i) => (
-              <motion.div key={item.label} whileHover={{ y: -6, scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <Link
-                  href={item.href}
-                  className={`block bg-gradient-to-b ${item.gradient} border-2 ${item.border} rounded-3xl p-5 text-center transition-all`}
-                >
-                  <motion.div
-                    className="text-4xl mb-2"
-                    animate={{ y: [0, -4, 0] }}
-                    transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4 }}
-                  >
-                    {item.emoji}
-                  </motion.div>
-                  <div className={`font-black text-lg ${item.text}`}>{item.label}</div>
-                  <div className="text-sm text-lumi-muted dark:text-slate-400 mt-0.5">{item.sub}</div>
-                </Link>
-              </motion.div>
-            ))}
+            <Link href="/eleve/parcours"
+              className="bg-lumi-blue-light border-2 border-lumi-blue rounded-3xl p-5 text-center hover:shadow-md hover:-translate-y-1 transition-all group"
+            >
+              <div className="text-4xl mb-2 group-hover:animate-bounce">🗺️</div>
+              <div className="font-black text-lumi-blue text-lg">Mon parcours</div>
+              <div className="text-sm text-lumi-muted mt-1">Voir toutes les séances</div>
+            </Link>
+
+            <Link href="/eleve/projet"
+              className="bg-lumi-purple-light border-2 border-lumi-purple rounded-3xl p-5 text-center hover:shadow-md hover:-translate-y-1 transition-all group"
+            >
+              <div className="text-4xl mb-2 group-hover:animate-bounce">🏆</div>
+              <div className="font-black text-lumi-purple text-lg">Mon projet</div>
+              <div className="text-sm text-lumi-muted mt-1">Assistant de devoirs</div>
+            </Link>
+
+            <div className="bg-lumi-yellow-light border-2 border-lumi-yellow rounded-3xl p-5 text-center">
+              <div className="text-4xl mb-2">⭐</div>
+              <div className="font-black text-yellow-700 text-lg">{xp} XP</div>
+              <div className="text-sm text-lumi-muted mt-1">Points d'expérience</div>
+            </div>
           </motion.div>
 
           {/* Badges */}
           <motion.div variants={stagger.item}>
-            <Card>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-black text-lumi-text dark:text-slate-100">Mes badges 🏅</h2>
-                <span className="text-sm text-lumi-muted dark:text-slate-400 font-bold bg-lumi-purple-light dark:bg-lumi-purple/20 text-lumi-purple px-3 py-1 rounded-xl">
-                  {unlockedBadgeIds.size} / {allBadges.length}
-                </span>
+          <Card>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-black text-lumi-text">Mes badges</h2>
+              <span className="text-sm text-lumi-muted font-semibold">
+                {unlockedBadgeIds.size} / {allBadges.length}
+              </span>
+            </div>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+              {allBadges.map(badge => (
+                <BadgeCard
+                  key={badge.id}
+                  badge={badge}
+                  unlocked={unlockedBadgeIds.has(badge.id)}
+                  size="sm"
+                />
+              ))}
+            </div>
+          </Card>
+          </motion.div>
+
+          {/* Teacher feedback */}
+          {(latestAssessment || commentedProgress.length > 0) && (
+            <motion.div variants={stagger.item}>
+              <Card>
+                <h2 className="text-xl font-black text-lumi-text mb-4">📬 Retours de mon prof</h2>
+                <div className="space-y-3">
+                  {latestAssessment && (
+                    <div className="bg-lumi-purple-light rounded-2xl p-4 space-y-2">
+                      <p className="text-xs font-bold text-lumi-purple uppercase tracking-wide">Bilan pédagogique</p>
+                      <p className="text-sm font-semibold text-lumi-text">{latestAssessment.summary}</p>
+                      {latestAssessment.strengths && (
+                        <p className="text-xs text-lumi-text"><span className="font-bold text-lumi-green">✅ Points forts : </span>{latestAssessment.strengths}</p>
+                      )}
+                      {latestAssessment.difficulties && (
+                        <p className="text-xs text-lumi-text"><span className="font-bold text-orange-500">💪 À améliorer : </span>{latestAssessment.difficulties}</p>
+                      )}
+                      {latestAssessment.recommendations && (
+                        <p className="text-xs text-lumi-text"><span className="font-bold text-lumi-blue">💡 Conseil : </span>{latestAssessment.recommendations}</p>
+                      )}
+                    </div>
+                  )}
+                  {commentedProgress.map(p => (
+                    <div key={p.id} className="bg-lumi-blue-light rounded-2xl p-3 flex gap-3 items-start">
+                      <span className="text-xl flex-shrink-0">💬</span>
+                      <p className="text-sm text-lumi-text">{p.teacher_comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* Stats */}
+          <motion.div variants={stagger.item}>
+          <Card>
+            <h2 className="text-xl font-black text-lumi-text mb-4">Mes statistiques</h2>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center">
+                <div className="text-3xl font-black text-lumi-blue">{student?.level ?? 1}</div>
+                <div className="text-xs text-lumi-muted font-semibold mt-1">Niveau</div>
               </div>
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
                 {allBadges.map(badge => (
@@ -189,7 +234,8 @@ export default function EleveDashboard() {
                   </motion.div>
                 ))}
               </div>
-            </Card>
+            </div>
+          </Card>
           </motion.div>
         </motion.div>
       </StudentLayout>

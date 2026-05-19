@@ -23,7 +23,8 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function OrderExercise({ content, xpReward, onComplete }: OrderExerciseProps) {
-  const correctSteps = content.steps
+  const scenarios = content.scenarios ?? []
+  const correctSteps: string[] = content.steps ?? (scenarios.length > 0 ? scenarios[0].steps : [])
   const [items, setItems] = useState<string[]>(() => shuffle(correctSteps))
   const [submitted, setSubmitted] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)

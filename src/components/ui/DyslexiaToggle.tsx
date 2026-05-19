@@ -19,10 +19,10 @@ export function DyslexiaToggle({ enabled, onToggle, className }: DyslexiaToggleP
           : 'border-lumi-purple/40 bg-lumi-purple-light text-lumi-purple hover:border-lumi-purple dark:bg-lumi-purple/10 dark:border-lumi-purple/30 dark:text-lumi-purple dark:hover:border-lumi-purple',
         className
       )}
-      title={enabled ? 'Désactiver le mode dyslexie' : 'Activer le mode dyslexie'}
+      title={enabled ? 'Désactiver le changement de typologie' : 'Activer le changement de typologie'}
     >
       <span className="text-base">👁️</span>
-      <span className="hidden sm:inline">{enabled ? 'Dys ON' : 'Dys'}</span>
+      <span className="hidden sm:inline">{enabled ? 'Changement de typologie ON' : 'Changement de typologie'}</span>
     </button>
   )
 }

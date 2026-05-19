@@ -9,18 +9,23 @@ import { XPBar } from '@/components/ui/XPBar'
 import Link from 'next/link'
 import type { Profile, Student } from '@/types'
 import { getLevelForXp } from '@/types'
-import { Search } from 'lucide-react'
+import { Search, AlertTriangle, Clock } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface StudentWithProfile extends Student {
   profile: Profile
   completed_count: number
   badges_count: number
+  last_active: string | null
 }
+
+type SortKey = 'xp' | 'name' | 'last_active' | 'completion'
 
 export default function ProfesseurDashboard() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [students, setStudents] = useState<StudentWithProfile[]>([])
   const [filter, setFilter] = useState('')
+  const [sort, setSort] = useState<SortKey>('last_active')
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
@@ -46,11 +51,17 @@ export default function ProfesseurDashboard() {
 
         const enriched = await Promise.all(
           (stus ?? []).map(async stu => {
-            const [prog, badges] = await Promise.all([
+            const [prog, badges, lastAct] = await Promise.all([
               supabase.from('student_activity_progress').select('id', { count: 'exact' }).eq('student_id', stu.id).eq('status', 'completed'),
               supabase.from('student_badges').select('id', { count: 'exact' }).eq('student_id', stu.id),
+              supabase.from('student_activity_progress').select('completed_at').eq('student_id', stu.id).eq('status', 'completed').order('completed_at', { ascending: false }).limit(1),
             ])
-            return { ...stu, completed_count: prog.count ?? 0, badges_count: badges.count ?? 0 }
+            return {
+              ...stu,
+              completed_count: prog.count ?? 0,
+              badges_count: badges.count ?? 0,
+              last_active: lastAct.data?.[0]?.completed_at ?? null,
+            }
           })
         )
         setStudents(enriched)
@@ -60,10 +71,45 @@ export default function ProfesseurDashboard() {
     load()
   }, [])
 
-  const filtered = students.filter(s => {
-    const name = `${s.profile?.first_name} ${s.profile?.last_name}`.toLowerCase()
-    return name.includes(filter.toLowerCase())
-  })
+  const inactiveDays = (lastActive: string | null) => {
+    if (!lastActive) return null
+    const diff = Date.now() - new Date(lastActive).getTime()
+    return Math.floor(diff / (1000 * 60 * 60 * 24))
+  }
+
+  const formatLastActive = (lastActive: string | null) => {
+    if (!lastActive) return 'Jamais connecté'
+    const days = inactiveDays(lastActive)!
+    if (days === 0) return 'Aujourd\'hui'
+    if (days === 1) return 'Hier'
+    if (days < 7) return `Il y a ${days} jours`
+    if (days < 30) return `Il y a ${Math.floor(days / 7)} semaine${Math.floor(days / 7) > 1 ? 's' : ''}`
+    return `Il y a ${Math.floor(days / 30)} mois`
+  }
+
+  const sorted = [...students]
+    .filter(s => {
+      const name = `${s.profile?.first_name} ${s.profile?.last_name}`.toLowerCase()
+      return name.includes(filter.toLowerCase())
+    })
+    .sort((a, b) => {
+      if (sort === 'xp') return b.xp - a.xp
+      if (sort === 'name') return `${a.profile?.first_name}`.localeCompare(`${b.profile?.first_name}`)
+      if (sort === 'completion') return b.completed_count - a.completed_count
+      // last_active: null (never active) goes last, most recent first
+      if (sort === 'last_active') {
+        if (!a.last_active && !b.last_active) return 0
+        if (!a.last_active) return 1
+        if (!b.last_active) return -1
+        return new Date(b.last_active).getTime() - new Date(a.last_active).getTime()
+      }
+      return 0
+    })
+
+  const inactiveCount = students.filter(s => {
+    const days = inactiveDays(s.last_active)
+    return days === null || days >= 7
+  }).length
 
   if (loading) {
     return (
@@ -89,7 +135,7 @@ export default function ProfesseurDashboard() {
           </div>
 
           {/* Summary stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3">
             <Card padding="sm">
               <div className="text-center">
                 <div className="text-2xl font-black text-lumi-purple">{students.length}</div>
@@ -98,7 +144,7 @@ export default function ProfesseurDashboard() {
             </Card>
             <Card padding="sm">
               <div className="text-center">
-                <div className="text-2xl font-black text-lumi-blue">
+                <div className="text-xl sm:text-2xl font-black text-lumi-blue">
                   {students.reduce((sum, s) => sum + s.completed_count, 0)}
                 </div>
                 <div className="text-xs text-lumi-muted dark:text-slate-400">Activités complétées</div>
@@ -106,29 +152,63 @@ export default function ProfesseurDashboard() {
             </Card>
             <Card padding="sm">
               <div className="text-center">
-                <div className="text-2xl font-black text-lumi-green">
-                  {students.reduce((sum, s) => sum + s.xp, 0)}
+                <div className={cn('text-xl sm:text-2xl font-black', inactiveCount > 0 ? 'text-orange-500' : 'text-lumi-green')}>
+                  {inactiveCount}
                 </div>
                 <div className="text-xs text-lumi-muted dark:text-slate-400">XP total</div>
               </div>
             </Card>
           </div>
 
-          {/* Search */}
+          {/* Inactivity alert */}
+          {inactiveCount > 0 && (
+            <div className="flex items-center gap-3 bg-orange-50 border-2 border-orange-200 rounded-2xl px-4 py-3">
+              <AlertTriangle className="w-5 h-5 text-orange-500 flex-shrink-0" />
+              <p className="text-sm font-semibold text-orange-700">
+                {inactiveCount} élève{inactiveCount > 1 ? 's' : ''} n'a pas travaillé depuis plus de 7 jours.
+              </p>
+            </div>
+          )}
+
+          {/* Search + Sort */}
           {students.length > 0 && (
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-lumi-muted" />
-              <input
-                value={filter}
-                onChange={e => setFilter(e.target.value)}
-                placeholder="Rechercher un élève…"
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-lumi-purple dark:focus:border-lumi-purple bg-white dark:bg-slate-800 text-lumi-text dark:text-slate-100 placeholder:text-lumi-muted dark:placeholder:text-slate-500 text-sm"
-              />
+            <div className="space-y-3">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-lumi-muted" />
+                <input
+                  value={filter}
+                  onChange={e => setFilter(e.target.value)}
+                  placeholder="Rechercher un élève…"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-lumi-purple text-sm"
+                />
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <span className="text-xs font-bold text-lumi-muted self-center">Trier :</span>
+                {([
+                  { key: 'last_active', label: 'Dernière activité' },
+                  { key: 'xp', label: 'XP' },
+                  { key: 'completion', label: 'Activités' },
+                  { key: 'name', label: 'Nom' },
+                ] as { key: SortKey; label: string }[]).map(opt => (
+                  <button
+                    key={opt.key}
+                    onClick={() => setSort(opt.key)}
+                    className={cn(
+                      'px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all',
+                      sort === opt.key
+                        ? 'bg-lumi-purple border-lumi-purple text-white'
+                        : 'bg-white border-gray-200 text-lumi-muted hover:border-lumi-purple'
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
           {/* Students list */}
-          {filtered.length === 0 ? (
+          {sorted.length === 0 ? (
             <Card>
               <div className="text-center py-10">
                 <div className="text-5xl mb-4">🎓</div>
@@ -142,14 +222,26 @@ export default function ProfesseurDashboard() {
             </Card>
           ) : (
             <div className="space-y-3">
-              {filtered.map(student => {
+              {sorted.map(student => {
                 const level = getLevelForXp(student.xp)
+                const days = inactiveDays(student.last_active)
+                const isInactive = days === null || days >= 7
+                const isVeryInactive = days === null || days >= 14
                 return (
                   <Link key={student.id} href={`/professeur/eleve/${student.id}`}>
-                    <Card className="hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer" padding="sm">
+                    <Card
+                      className={cn(
+                        'hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer',
+                        isVeryInactive ? 'border-red-200' : isInactive ? 'border-orange-200' : ''
+                      )}
+                      padding="sm"
+                    >
                       <div className="flex items-center gap-4 p-2">
-                        <div className="w-12 h-12 rounded-2xl bg-lumi-purple-light flex items-center justify-center text-2xl flex-shrink-0">
-                          🧒
+                        <div className={cn(
+                          'w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0',
+                          isVeryInactive ? 'bg-red-50' : isInactive ? 'bg-orange-50' : 'bg-lumi-purple-light'
+                        )}>
+                          {isVeryInactive ? '😴' : isInactive ? '⏰' : '🧒'}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
@@ -163,9 +255,16 @@ export default function ProfesseurDashboard() {
                           <div className="mt-1">
                             <XPBar xp={student.xp} compact />
                           </div>
-                          <div className="flex gap-4 mt-2 text-xs text-lumi-muted dark:text-slate-400">
+                          <div className="flex items-center gap-4 mt-2 text-xs text-lumi-muted flex-wrap">
                             <span>✅ {student.completed_count} activités</span>
                             <span>🏅 {student.badges_count} badges</span>
+                            <span className={cn(
+                              'flex items-center gap-1',
+                              isVeryInactive ? 'text-red-500 font-bold' : isInactive ? 'text-orange-500 font-semibold' : ''
+                            )}>
+                              {isInactive && <Clock className="w-3 h-3" />}
+                              {formatLastActive(student.last_active)}
+                            </span>
                           </div>
                         </div>
                       </div>

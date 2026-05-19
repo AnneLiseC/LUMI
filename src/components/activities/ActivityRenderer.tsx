@@ -10,6 +10,7 @@ import { CardExercise } from './CardExercise'
 import { OrderExercise } from './OrderExercise'
 import { IntroExercise } from './IntroExercise'
 import { ProjectStepExercise } from './ProjectStepExercise'
+import { GuidedSearchExercise } from './GuidedSearchExercise'
 import { Button } from '@/components/ui/Button'
 import { useState } from 'react'
 
@@ -49,7 +50,7 @@ export function ActivityRenderer({ activity, onComplete }: ActivityRendererProps
     case 'editor':
     case 'todo':
     case 'search':
-      return <ReflectionExercise content={content as never} xpReward={activity.xp_reward} onComplete={s => onComplete(s)} type={activity.type as 'reflection' | 'editor'} />
+      return <ReflectionExercise content={content as never} xpReward={activity.xp_reward} onComplete={(s, data) => onComplete(s, undefined, data)} type={activity.type as 'reflection' | 'editor'} />
 
     case 'emotion':
       return <EmotionExercise content={content as never} xpReward={activity.xp_reward} onComplete={s => onComplete(s)} />
@@ -66,6 +67,9 @@ export function ActivityRenderer({ activity, onComplete }: ActivityRendererProps
 
     case 'project_step':
       return <ProjectStepExercise content={content as never} xpReward={activity.xp_reward} onComplete={handleProjectComplete} />
+
+    case 'guided_search':
+      return <GuidedSearchExercise content={content as never} xpReward={activity.xp_reward} onComplete={s => onComplete(s)} />
 
     default:
       return (

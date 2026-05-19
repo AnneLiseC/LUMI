@@ -21,27 +21,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={nunito.variable} suppressHydrationWarning>
       <head>
-        {/* Prevent flash of wrong theme */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('lumi-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}})();` }} />
+        {/* Inline script: apply dark class before first paint to avoid flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('lumi-theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`,
+          }}
+        />
       </head>
       <body className="antialiased">
-        <ThemeProvider>
-          {children}
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              duration: 3000,
-              className: 'dark:!bg-slate-800 dark:!text-slate-100 dark:!border-slate-700',
-              style: {
-                borderRadius: '16px',
-                border: '2px solid #EDE9FE',
-                fontWeight: 600,
-                fontSize: '15px',
-                fontFamily: 'var(--font-nunito)',
-              },
-            }}
-          />
-        </ThemeProvider>
+        {children}
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#fff',
+              color: '#1E293B',
+              borderRadius: '16px',
+              border: '2px solid #DBEAFE',
+              fontWeight: 600,
+              fontSize: '15px',
+            },
+          }}
+        />
       </body>
     </html>
   )

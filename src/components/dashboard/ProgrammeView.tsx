@@ -117,8 +117,8 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
 
         return (
           <div key={blockName} className="space-y-3">
-            <div className="flex items-center gap-3">
-              <span className={cn('px-3 py-1.5 rounded-xl text-sm font-black', colors.badge)}>
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className={cn('px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black', colors.badge)}>
                 {blockName}
               </span>
               <span className="text-sm text-lumi-muted dark:text-slate-400">
@@ -163,7 +163,7 @@ export function ProgrammeView({ detailBasePath }: ProgrammeViewProps) {
                           <Clock className="w-3.5 h-3.5" />
                           {formatDuration(session.estimated_duration_minutes)}
                         </span>
-                        <span>{activities.length} activités</span>
+                        <span className="hidden sm:inline">{activities.length} activités</span>
                         {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                       </div>
                     </button>

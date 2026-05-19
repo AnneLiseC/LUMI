@@ -80,8 +80,8 @@ export default function ParcoursPage() {
       <StudentLayout student={student ?? undefined}>
         <div className="space-y-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text dark:text-slate-100">Mon parcours 🗺️</h1>
-            <p className="text-lumi-muted dark:text-slate-400 mt-1">Suis les séances dans l'ordre pour progresser !</p>
+            <h1 className="text-2xl sm:text-3xl font-black text-lumi-text">Mon parcours 🗺️</h1>
+            <p className="text-lumi-muted mt-1">Suis les séances dans l'ordre pour progresser !</p>
           </div>
 
           {Object.entries(groupedSessions).map(([blockName, blockSessions]) => (

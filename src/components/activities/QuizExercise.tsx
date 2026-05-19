@@ -51,8 +51,8 @@ export function QuizExercise({ content, xpReward, onComplete }: QuizExerciseProp
   const handleNext = () => {
     if (currentIndex + 1 >= questions.length) {
       setFinished(true)
-      const finalScore = Math.round(((score + (isCorrect ? 1 : 0)) / questions.length) * 100)
-      onComplete(finalScore)
+      const finalScore = Math.round((score / questions.length) * 100)
+      onComplete(Math.min(100, finalScore))
     } else {
       setCurrentIndex(i => i + 1)
       setSelected(null)

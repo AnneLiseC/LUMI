@@ -17,13 +17,13 @@ export function XPBar({ xp, className, compact = false }: XPBarProps) {
   if (compact) {
     return (
       <div className={cn('flex items-center gap-2', className)}>
-        <span className="text-xs font-black text-lumi-purple dark:text-lumi-purple">Niv.{level.level}</span>
-        <div className="flex-1 h-2 bg-lumi-purple-light dark:bg-slate-700 rounded-full overflow-hidden">
+        <span className="text-xs font-bold text-lumi-purple">Niv.{level.level}</span>
+        <div className="flex-1 h-2 bg-lumi-purple-light rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-lumi-purple to-lumi-blue rounded-full"
+            className="h-full bg-gradient-to-r from-lumi-purple to-lumi-blue rounded-full xp-glow"
             initial={{ width: 0 }}
             animate={{ width: `${percent}%` }}
-            transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
           />
         </div>
         <span className="text-xs text-lumi-muted dark:text-slate-400 font-semibold">{xp} XP</span>
@@ -39,16 +39,12 @@ export function XPBar({ xp, className, compact = false }: XPBarProps) {
         </span>
         <span className="text-sm text-lumi-muted dark:text-slate-400 font-semibold">{xp} XP</span>
       </div>
-      <div className="h-4 bg-lumi-purple-light dark:bg-slate-700 rounded-full overflow-hidden">
+      <div className="h-4 bg-lumi-purple-light rounded-full overflow-hidden">
         <motion.div
-          className="h-full rounded-full"
-          style={{
-            background: 'linear-gradient(90deg, #A78BFA 0%, #6C9FFF 50%, #22D3EE 100%)',
-            boxShadow: '0 0 12px rgba(167,139,250,0.6)',
-          }}
+          className="h-full bg-gradient-to-r from-lumi-purple via-lumi-blue to-cyan-400 rounded-full xp-glow"
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
-          transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
         />
       </div>
       <div className="flex justify-between text-xs text-lumi-muted dark:text-slate-500">

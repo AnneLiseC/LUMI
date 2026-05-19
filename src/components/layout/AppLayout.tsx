@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -25,6 +26,7 @@ const defaultNavItems = {
   teacher: [
     { href: '/professeur', label: 'Mes élèves', icon: Users },
     { href: '/professeur/programme', label: 'Programme', icon: BookOpen },
+    { href: '/professeur/statistiques', label: 'Statistiques', icon: TrendingUp },
   ],
   admin: [
     { href: '/admin', label: 'Administration', icon: Settings },
@@ -41,6 +43,19 @@ const roleLabels = {
   parent: 'Espace Parent',
   teacher: 'Espace Professeur',
   admin: 'Administration',
+}
+
+function LumiLogo() {
+  return (
+    <div className="flex items-center gap-2.5">
+      <div className="w-9 h-9 rounded-xl lumi-logo-gradient flex items-center justify-center shadow-lg animate-logo-glow flex-shrink-0">
+        <span className="text-white font-black text-xl">L</span>
+      </div>
+      <span className="font-black text-xl bg-gradient-to-r from-lumi-purple via-lumi-blue to-cyan-500 bg-clip-text text-transparent">
+        LUMI
+      </span>
+    </div>
+  )
 }
 
 export function AppLayout({ children, role, userName, navItems }: AppLayoutProps) {
@@ -122,7 +137,7 @@ export function AppLayout({ children, role, userName, navItems }: AppLayoutProps
           </button>
           <ThemeToggle />
         </div>
-      </aside>
+      </header>
 
       {/* Mobile header — hidden on lg */}
       <header className="lg:hidden sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800">

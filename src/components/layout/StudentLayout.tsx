@@ -17,10 +17,23 @@ interface StudentLayoutProps {
   student?: { xp: number; level: number }
 }
 
+function LumiLogo() {
+  return (
+    <Link href="/eleve" className="flex items-center gap-2 flex-shrink-0">
+      <div className="w-9 h-9 rounded-xl lumi-logo-gradient flex items-center justify-center shadow-lg animate-logo-glow">
+        <span className="text-white font-black text-xl">L</span>
+      </div>
+      <span className="font-black text-xl bg-gradient-to-r from-lumi-purple via-lumi-blue to-cyan-500 bg-clip-text text-transparent hidden sm:block">
+        LUMI
+      </span>
+    </Link>
+  )
+}
+
 const navItems = [
   { href: '/eleve', label: 'Accueil', icon: Home },
-  { href: '/eleve/parcours', label: 'Parcours', icon: Map },
-  { href: '/eleve/projet', label: 'Projet', icon: Star },
+  { href: '/eleve/parcours', label: 'Mon parcours', icon: Map },
+  { href: '/eleve/projet', label: 'Mon projet', icon: Star },
 ]
 
 export function StudentLayout({ children, student }: StudentLayoutProps) {

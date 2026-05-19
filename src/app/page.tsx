@@ -53,12 +53,12 @@ export default function HomePage() {
 
         {/* Tagline */}
         <motion.div
+          className="space-y-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-3"
+          transition={{ delay: 0.25, duration: 0.5 }}
         >
-          <p className="text-2xl font-black text-lumi-text dark:text-slate-100">
+          <p className="text-2xl font-bold text-lumi-text dark:text-gray-100">
             Avance à ton rythme. 🚀
           </p>
           <p className="text-lumi-muted dark:text-slate-400 text-lg leading-relaxed max-w-lg mx-auto">
@@ -67,36 +67,39 @@ export default function HomePage() {
           </p>
         </motion.div>
 
-        {/* Feature cards */}
+        {/* Features */}
         <motion.div
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.35 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+          transition={{ delay: 0.4, duration: 0.5 }}
         >
-          {features.map((f, i) => (
+          {[
+            { emoji: '💻', label: 'Ordinateur' },
+            { emoji: '🤖', label: 'Intelligence IA' },
+            { emoji: '🧩', label: 'Logique' },
+            { emoji: '⭐', label: 'XP & Badges' },
+          ].map((f, i) => (
             <motion.div
               key={f.label}
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 text-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 + i * 0.08 }}
-              whileHover={{ y: -6, scale: 1.04 }}
-              className={`bg-gradient-to-b ${f.color} rounded-2xl p-4 border text-center backdrop-blur-sm`}
+              transition={{ delay: 0.4 + i * 0.1, duration: 0.4 }}
+              whileHover={{ scale: 1.05, y: -4 }}
             >
-              <div className="text-3xl mb-2 animate-float" style={{ animationDelay: `${i * 0.3}s` }}>
-                {f.emoji}
-              </div>
-              <p className="text-sm font-black text-lumi-text dark:text-slate-200">{f.label}</p>
+              <div className="text-3xl mb-2">{f.emoji}</div>
+              <p className="text-sm font-bold text-lumi-text dark:text-gray-200">{f.label}</p>
             </motion.div>
           ))}
         </motion.div>
 
         {/* CTA */}
         <motion.div
+          className="flex flex-col sm:flex-row gap-3 justify-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-3 justify-center"
+          transition={{ delay: 0.6, duration: 0.5 }}
         >
           <Link href="/login">
             <Button size="lg" className="w-full sm:w-auto">

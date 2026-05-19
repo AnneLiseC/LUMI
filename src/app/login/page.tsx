@@ -35,59 +35,87 @@ export default function LoginPage() {
   const fillDemo = (e: string, p: string) => { setEmail(e); setPassword(p) }
 
   return (
-    <div className="min-h-screen bg-lumi-cream dark:bg-transparent flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-32 -left-32 w-80 h-80 rounded-full bg-lumi-purple/20 dark:bg-lumi-purple/10 blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-lumi-blue/20 dark:bg-lumi-blue/10 blur-3xl" />
+    <div className="min-h-screen bg-gradient-to-br from-lumi-blue-light via-lumi-cream to-lumi-purple-light dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* Animated blobs */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-lumi-purple rounded-full opacity-20 blur-3xl animate-blob pointer-events-none" />
+      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-lumi-blue rounded-full opacity-20 blur-3xl animate-blob pointer-events-none" style={{ animationDelay: '3s' }} />
+
+      {/* Theme toggle */}
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
       </div>
 
-      <div className="absolute top-6 right-6"><ThemeToggle /></div>
-
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
         className="w-full max-w-md space-y-6 relative z-10"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
       >
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="inline-flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-lumi-purple to-lumi-blue flex items-center justify-center shadow-glow">
+            <div className="w-12 h-12 rounded-2xl lumi-logo-gradient flex items-center justify-center shadow-lg animate-logo-glow">
               <span className="text-white font-black text-2xl">L</span>
             </div>
-            <span className="text-3xl font-black text-lumi-text dark:text-slate-100 tracking-tight">LUMI</span>
+            <span className="text-3xl font-black bg-gradient-to-r from-lumi-purple via-lumi-blue to-cyan-500 bg-clip-text text-transparent">
+              LUMI
+            </span>
           </Link>
-          <h1 className="text-2xl font-black text-lumi-text dark:text-slate-100">Connexion</h1>
-          <p className="text-lumi-muted dark:text-slate-400 mt-1">Reprends là où tu t'es arrêté·e !</p>
+          <h1 className="text-2xl font-black text-lumi-text dark:text-gray-100">Connexion</h1>
+          <p className="text-lumi-muted mt-1">Continue où tu t&apos;es arrêté·e !</p>
         </div>
 
-        {/* Form card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-card dark:shadow-card-dark border border-slate-100 dark:border-slate-800 p-8 space-y-5">
+        {/* Form */}
+        <motion.div
+          className="bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-3xl shadow-lg border border-gray-100 dark:border-gray-800 p-8 space-y-5"
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.15, duration: 0.4 }}
+        >
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-black text-lumi-text dark:text-slate-200 block">Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="ton@email.fr" className="lumi-input" />
+              <label className="text-sm font-bold text-lumi-text dark:text-gray-200 block">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                placeholder="ton@email.fr"
+                className="w-full border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-2xl px-4 py-3 text-base focus:outline-none focus:border-lumi-blue transition-colors"
+              />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-black text-lumi-text dark:text-slate-200 block">Mot de passe</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" className="lumi-input" />
+              <label className="text-sm font-bold text-lumi-text dark:text-gray-200 block">Mot de passe</label>
+              <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                className="w-full border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-2xl px-4 py-3 text-base focus:outline-none focus:border-lumi-blue transition-colors"
+              />
             </div>
             <Button type="submit" loading={loading} className="w-full" size="lg">
               Se connecter 🚀
             </Button>
           </form>
-          <div className="border-t border-slate-100 dark:border-slate-800 pt-4 text-center">
-            <p className="text-sm text-lumi-muted dark:text-slate-400">
+
+          <div className="border-t border-gray-100 dark:border-gray-800 pt-4 text-center">
+            <p className="text-sm text-lumi-muted">
               Pas encore de compte ?{' '}
               <Link href="/register" className="text-lumi-purple font-black hover:underline">Créer un compte</Link>
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Demo accounts */}
-        <div className="bg-white/60 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-white/10">
-          <p className="text-xs font-black text-lumi-muted dark:text-slate-400 mb-3 text-center uppercase tracking-wide">Comptes de démo</p>
+        <motion.div
+          className="bg-white/80 dark:bg-gray-900/80 backdrop-blur rounded-2xl p-4 border border-gray-200 dark:border-gray-700"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        >
+          <p className="text-xs font-bold text-lumi-muted mb-3 text-center">Comptes de démonstration</p>
           <div className="grid grid-cols-2 gap-2">
             {[
               { label: '🧒 Élève', email: 'eleve@lumi.app', password: 'Lumi2024!' },
@@ -96,16 +124,16 @@ export default function LoginPage() {
               { label: '⚙️ Admin', email: 'admin@lumi.app', password: 'Lumi2024!' },
             ].map(a => (
               <button
-                key={a.email}
-                onClick={() => fillDemo(a.email, a.password)}
-                className="text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-lumi-purple hover:bg-lumi-purple-light dark:hover:bg-lumi-purple/10 transition-all text-left dark:text-slate-300"
+                key={account.email}
+                onClick={() => fillDemo(account.email, account.password)}
+                className="text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-lumi-blue hover:bg-lumi-blue-light dark:hover:bg-blue-950 transition-all text-left"
               >
                 <span className="block font-black">{a.label}</span>
                 <span className="text-lumi-muted dark:text-slate-500 block truncate">{a.email}</span>
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   )

@@ -49,19 +49,22 @@ export function EmotionExercise({ content, xpReward, onComplete }: EmotionExerci
               <div className="flex-1">
                 <p className="text-sm font-semibold text-lumi-text">{q.text}</p>
                 <p className="text-sm text-lumi-purple font-bold">
-                  {content.scale[answers[q.id]]} ({answers[q.id]}/5)
+                  {content.scale[answers[q.id]]} ({answers[q.id]}/{scaleKeys.length})
                 </p>
               </div>
               <div className="flex gap-1">
-                {[1,2,3,4,5].map(v => (
-                  <div
-                    key={v}
-                    className={cn(
-                      'w-3 h-3 rounded-full',
-                      v <= answers[q.id] ? 'bg-lumi-yellow' : 'bg-gray-200'
-                    )}
-                  />
-                ))}
+                {scaleKeys.map((key) => {
+                  const v = parseInt(key)
+                  return (
+                    <div
+                      key={key}
+                      className={cn(
+                        'w-3 h-3 rounded-full',
+                        v <= answers[q.id] ? 'bg-lumi-yellow' : 'bg-gray-200'
+                      )}
+                    />
+                  )
+                })}
               </div>
             </div>
           ))}

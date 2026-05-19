@@ -55,6 +55,7 @@ export type ActivityType =
   | 'card'
   | 'map'
   | 'project_step'
+  | 'guided_search'
 
 export interface Activity {
   id: string
@@ -81,6 +82,7 @@ export interface StudentActivityProgress {
   time_spent_seconds: number
   completed_at: string | null
   created_at: string
+  answer_data?: Record<string, unknown> | null
 }
 
 export interface Badge {
