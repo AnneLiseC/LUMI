@@ -231,35 +231,35 @@ on conflict do nothing;
 -- ============================================================
 with s5 as (
   insert into sessions (session_number, title, block_name, objective, description, order_index, estimated_duration_minutes)
-  values (6, 'Découvrir l''intelligence artificielle', 'Bloc 2 – IA & Esprit critique',
-          'Comprendre ce qu''est une IA.',
-          'Plonge dans le monde fascinant de l''intelligence artificielle !',
-          6, 30)
+  values (6, 'Les robots sont parmi nous ! 🤖', 'Bloc 2 – IA & Esprit critique',
+          'Découvrir ce qu''est une IA et comment elle est déjà dans ta vie.',
+          'Tu utilises peut-être déjà des IA sans le savoir ! Enquête avec nous pour les repérer.',
+          6, 35)
   returning id
 )
 insert into activities (session_id, title, type, duration_minutes, instructions, content, order_index, xp_reward)
 select s5.id, act.title, act.type, act.dur, act.instr, act.content::jsonb, act.ord, act.xp
 from s5, (values
-  ('IA ou pas IA ?', 'quiz', 7,
-   'Pour chaque exemple, dis si c''est une IA ou non.',
-   '{"questions":[{"id":"ia1","text":"Une calculatrice de poche","emoji":"🧮","options":["C''est une IA","Ce n''est pas une IA"],"correct":1,"explanation":"Une calculatrice fait des calculs préprogrammés, elle n''apprend pas."},{"id":"ia2","text":"Un assistant vocal comme Siri","emoji":"🎙️","options":["C''est une IA","Ce n''est pas une IA"],"correct":0,"explanation":"Oui ! Il comprend la voix, apprend de tes habitudes et répond intelligemment."},{"id":"ia3","text":"Un moteur de recherche basique","emoji":"🔍","options":["C''est une IA","Ce n''est pas une IA"],"correct":1,"explanation":"Un moteur de base cherche des mots-clés. Les IA modernes font bien plus !"},{"id":"ia4","text":"Un chatbot qui répond à tes questions","emoji":"🤖","options":["C''est une IA","Ce n''est pas une IA"],"correct":0,"explanation":"Oui ! Il comprend le langage naturel et génère des réponses adaptées."},{"id":"ia5","text":"Un jeu vidéo avec des ennemis qui s''adaptent","emoji":"🎮","options":["C''est une IA","Ce n''est pas une IA"],"correct":0,"explanation":"Oui ! L''IA de jeu apprend de tes actions pour s''adapter à ton niveau."}]}',
-   1, 20),
-  ('À quoi sert une IA ?', 'card', 5,
-   'Découvre les différentes choses qu''une IA peut faire pour toi.',
-   '{"cards":[{"title":"Expliquer","emoji":"💡","description":"L''IA peut expliquer des concepts difficiles dans des mots simples."},{"title":"Résumer","emoji":"📋","description":"Elle peut lire un long texte et te donner l''essentiel."},{"title":"Donner des idées","emoji":"🌈","description":"Bloqué sur un sujet ? L''IA peut te suggérer des pistes."},{"title":"Corriger","emoji":"✏️","description":"Elle peut repérer les fautes dans ton texte."},{"title":"Aider à réviser","emoji":"📚","description":"Elle peut te poser des questions sur ta leçon."},{"title":"Générer des images","emoji":"🎨","description":"Certaines IA créent des images à partir de descriptions."}]}',
-   2, 10),
-  ('Ce qu''une IA ne sait pas faire', 'quiz', 5,
-   'Vrai ou faux ? Teste ce que tu sais sur les limites des IA.',
-   '{"type":"true_false","questions":[{"id":"lim1","text":"Une IA peut parfois se tromper","correct":true,"explanation":"Oui ! Les IA font des erreurs. C''est pourquoi il faut toujours vérifier les informations importantes."},{"id":"lim2","text":"Une IA peut remplacer mon cerveau","correct":false,"explanation":"Non ! L''IA est un outil. C''est toi qui réfléchis, qui choisis et qui crées."},{"id":"lim3","text":"Je dois vérifier les réponses importantes d''une IA","correct":true,"explanation":"Exactement ! Même si l''IA est souvent juste, elle peut se tromper sur des faits."},{"id":"lim4","text":"Une IA connaît toujours l''actualité récente","correct":false,"explanation":"Non ! Les IA ont une date limite de connaissance et ne sont pas toujours à jour."}]}',
-   3, 20),
-  ('Mon premier prompt', 'editor', 8,
-   'Écris une question claire pour une IA sur un sujet de ton choix.',
-   '{"task":"Écris une question précise que tu pourrais poser à une IA pour t''aider dans tes devoirs.","examples":["Explique-moi les volcans avec des mots simples pour un enfant de 10 ans.","Donne-moi 3 exemples de la vie quotidienne qui utilisent les fractions."],"min_length":20,"placeholder":"Ma question pour l''IA..."}',
-   4, 20),
+  ('C''est quoi une IA ? 🤔', 'card', 5,
+   'Lis ces 3 cartes pour comprendre ce qu''est une IA avant de jouer !',
+   '{"intro":true,"cards":[{"title":"Une IA, c''est quoi ?","emoji":"🧠","description":"Une IA (Intelligence Artificielle) est un programme informatique qui apprend tout seul, comme un cerveau ! Plus on lui donne d''exemples, plus elle devient intelligente."},{"title":"Comment elle apprend ?","emoji":"📚","description":"Imagine que tu regardes 1 million de photos de chats. Tu saurais reconnaître un chat partout ! C''est pareil pour une IA. Elle apprend en regardant des millions d''exemples."},{"title":"Elle est déjà partout !","emoji":"👀","description":"YouTube qui choisit ta prochaine vidéo, Face ID qui reconnaît ton visage, Alexa qui répond quand tu parles… c''est déjà des IA !"}]}',
+   1, 10),
+  ('Chasse aux IA cachées ! 🕵️', 'quiz', 8,
+   'Dans ta vie de tous les jours, il y a des IA cachées partout ! Sauras-tu les trouver ?',
+   '{"questions":[{"id":"ia1","text":"YouTube choisit la prochaine vidéo à regarder","emoji":"▶️","options":["C''est une IA 🤖","Pas une IA ❌"],"correct":0,"explanation":"Oui ! YouTube utilise une IA qui observe ce que tu regardes et choisit des vidéos que tu vas sûrement adorer."},{"id":"ia2","text":"Un réveil qui sonne à 7h tous les matins","emoji":"⏰","options":["C''est une IA 🤖","Pas une IA ❌"],"correct":1,"explanation":"Non, un réveil fait juste ce qu''on lui dit. Il n''apprend pas, il ne choisit pas, il sonne c''est tout !"},{"id":"ia3","text":"Face ID qui reconnaît ton visage pour déverrouiller le téléphone","emoji":"📱","options":["C''est une IA 🤖","Pas une IA ❌"],"correct":0,"explanation":"Oui ! Face ID a appris à reconnaître TON visage parmi des milliards de visages. C''est de l''IA !"},{"id":"ia4","text":"Un jeu vidéo où les ennemis deviennent plus forts si tu gagnes trop souvent","emoji":"🎮","options":["C''est une IA 🤖","Pas une IA ❌"],"correct":0,"explanation":"Oui ! Les ennemis s''adaptent à ton niveau. Ils apprennent comment tu joues. C''est l''IA du jeu !"},{"id":"ia5","text":"Une calculatrice qui fait 3+4=7","emoji":"🧮","options":["C''est une IA 🤖","Pas une IA ❌"],"correct":1,"explanation":"Non ! Une calculatrice suit juste des règles fixes. Elle n''apprend rien du tout."},{"id":"ia6","text":"Spotify qui te propose une playlist selon tes goûts","emoji":"🎵","options":["C''est une IA 🤖","Pas une IA ❌"],"correct":0,"explanation":"Oui ! Spotify a appris ce que tu aimes écouter et te propose des musiques parfaites pour toi."}]}',
+   2, 25),
+  ('Trie les super-pouvoirs de l''IA ! 💪', 'drag_drop', 7,
+   'Glisse chaque pouvoir dans la bonne catégorie : ce que l''IA SAIT faire et ce qu''elle NE SAIT PAS faire.',
+   '{"categories":[{"id":"can","label":"L''IA SAIT faire ✅","color":"green"},{"id":"cannot","label":"L''IA NE SAIT PAS faire ❌","color":"red"}],"items":[{"id":"i1","label":"Écrire une histoire","category":"can","emoji":"✍️"},{"id":"i2","label":"Sentir une pizza","category":"cannot","emoji":"🍕"},{"id":"i3","label":"Traduire un texte","category":"can","emoji":"🌍"},{"id":"i4","label":"Être vraiment triste","category":"cannot","emoji":"😢"},{"id":"i5","label":"Répondre à tes questions","category":"can","emoji":"💬"},{"id":"i6","label":"Faire une câlin","category":"cannot","emoji":"🤗"},{"id":"i7","label":"Corriger tes fautes","category":"can","emoji":"✏️"},{"id":"i8","label":"Décider ce qui est juste ou faux","category":"cannot","emoji":"⚖️"}],"shuffle":true}',
+   3, 25),
+  ('Parle à une IA pour la 1ère fois ! 🚀', 'editor', 8,
+   'C''est ta première mission de prompt ! Écris une vraie question à une IA. Sois précis et amusant !',
+   '{"missions":[{"id":"m1","emoji":"🦕","label":"Mission dinosaures","task":"Demande à une IA de t''expliquer pourquoi les dinosaures ont disparu, avec des mots simples.","starter":"Explique-moi pourquoi les dinosaures ont disparu. Je suis en...","min_length":25},{"id":"m2","emoji":"😂","label":"Mission blague","task":"Demande à une IA d''inventer une blague rigolote sur les animaux.","starter":"Invente une blague courte et super drôle sur un...","min_length":20}],"tip":"Plus ta question est précise, plus la réponse sera cool !"}',
+   4, 25),
   ('Exercice clavier', 'typing', 5,
-   'Tape cette phrase pour terminer.',
-   '{"text":"Une IA peut m''aider, mais je dois réfléchir aussi.","target_wpm":18,"show_timer":false}',
-   5, 10)
+   'Tape cette phrase pour terminer la séance !',
+   '{"text":"Une IA apprend, mais c''est moi qui décide !","target_wpm":18,"show_timer":false}',
+   5, 15)
 ) as act(title, type, dur, instr, content, ord, xp)
 on conflict do nothing;
 
@@ -268,31 +268,35 @@ on conflict do nothing;
 -- ============================================================
 with s6 as (
   insert into sessions (session_number, title, block_name, objective, description, order_index, estimated_duration_minutes)
-  values (7, 'Bien poser une question à une IA', 'Bloc 2 – IA & Esprit critique',
-          'Apprendre à formuler un bon prompt.',
-          'Apprends l''art de poser des questions claires pour obtenir de super réponses !',
-          7, 35)
+  values (7, 'Parle à une IA comme un pro ! 🎯', 'Bloc 2 – IA & Esprit critique',
+          'Apprendre à formuler des questions claires pour obtenir les meilleures réponses.',
+          'Une bonne question = une super réponse ! Apprends le secret des meilleurs utilisateurs d''IA.',
+          7, 40)
   returning id
 )
 insert into activities (session_id, title, type, duration_minutes, instructions, content, order_index, xp_reward)
 select s6.id, act.title, act.type, act.dur, act.instr, act.content::jsonb, act.ord, act.xp
 from s6, (values
-  ('Question floue ou claire ?', 'comparison', 8,
-   'Compare ces questions et dis laquelle est la meilleure.',
-   '{"pairs":[{"id":"p1","label":"Questions sur les maths","vague":"Explique-moi les maths","clear":"Explique-moi les fractions avec un exemple simple pour un élève de CM2","why":"La question claire précise le sujet exact, le niveau, et demande un exemple."},{"id":"p2","label":"Questions sur l''histoire","vague":"Parle-moi de la guerre","clear":"Explique-moi les 3 causes principales de la Première Guerre mondiale en quelques phrases simples","why":"La question claire précise le sujet, le nombre de points, et le format souhaité."},{"id":"p3","label":"Questions sur les sciences","vague":"C''est quoi les plantes ?","clear":"Comment fonctionne la photosynthèse ? Explique avec une analogie simple pour un enfant de 10 ans","why":"La question claire demande un processus précis et un format adapté à ton âge."}]}',
-   1, 20),
-  ('La formule magique', 'card', 5,
-   'Mémorise cette formule pour créer de super prompts !',
-   '{"title":"La formule magique du prompt","steps":[{"num":1,"label":"Mon niveau","emoji":"🎯","example":"Je suis en CM2"},{"num":2,"label":"Mon besoin","emoji":"💭","example":"J''ai besoin de comprendre les volcans"},{"num":3,"label":"Le format","emoji":"📋","example":"Donne-moi une explication en 3 points simples"},{"num":4,"label":"Un exemple","emoji":"✨","example":"Avec un exemple de la vie réelle"}],"example_prompt":"Je suis en CM2. J''ai besoin de comprendre les volcans. Explique-moi en 3 points simples avec un exemple de la vie réelle."}',
-   2, 10),
-  ('Atelier prompt', 'editor', 10,
-   'Écris 3 prompts en utilisant la formule magique.',
-   '{"tasks":[{"id":"t1","label":"Pour comprendre une leçon","placeholder":"Je suis en... J''ai besoin de comprendre... Explique-moi en..."},{"id":"t2","label":"Pour corriger un texte","placeholder":"Je suis en... Mon texte parle de... Corrige mes erreurs et..."},{"id":"t3","label":"Pour trouver une méthode de maths","placeholder":"Je suis en... Je bloque sur... Montre-moi les étapes pour..."}],"min_length":20}',
-   3, 20),
+  ('Le jeu du téléphone raté 😅', 'comparison', 8,
+   'Regarde ce qui se passe quand on pose une question trop floue à une IA… c''est la catastrophe ! Choisis toujours la meilleure question.',
+   '{"intro":"Quand une question est trop floue, l''IA répond n''importe quoi. Lis les deux questions et choisis celle qui va donner la meilleure réponse !","pairs":[{"id":"p1","label":"Pour les devoirs de sciences","vague":"Parle-moi des animaux","vague_result":"Voici une liste de 500 animaux qui existent sur Terre…","clear":"Explique-moi comment les dauphins communiquent, avec 2 exemples rigolos, pour un enfant de 9 ans","clear_result":"Les dauphins parlent avec des clics et des sifflements. C''est comme s''ils avaient leur propre langage secret !","why":"La question précise dit QUOI (dauphins), COMMENT (exemples rigolos) et POUR QUI (9 ans). L''IA sait exactement quoi faire !"},{"id":"p2","label":"Pour inventer une histoire","vague":"Écris une histoire","vague_result":"Il était une fois un personnage qui vivait quelque part et il lui arriva quelque chose...","clear":"Invente une histoire courte et drôle avec un chat qui veut devenir astronaute mais qui a le mal de l''espace","clear_result":"Milo le chat avait toujours rêvé d''aller dans l''espace. Mais dès qu''il monta dans la fusée... il vomit sur la combinaison du commandant !","why":"En donnant des détails (animal, rêve, problème drôle), tu aides l''IA à créer quelque chose d''unique et d''amusant !"},{"id":"p3","label":"Pour réviser les maths","vague":"Aide-moi en maths","vague_result":"Les mathématiques est une science qui étudie les nombres, les formes et les structures...","clear":"Je suis en CM1 et je n''arrive pas à faire les divisions. Explique-moi comment faire 48÷6 avec une méthode simple, étape par étape","clear_result":"Étape 1 : Combien de fois 6 rentre dans 4 ? Zéro ! Étape 2 : Combien de fois 6 rentre dans 48 ? 8 fois ! Donc 48÷6 = 8 🎉","why":"Tu as dit ton niveau (CM1), le problème exact (divisions) et le format voulu (étape par étape). Parfait !"}]}',
+   1, 25),
+  ('La recette du super prompt 🍳', 'card', 6,
+   'Mémorise les 3 ingrédients magiques. Avec eux, tes prompts seront toujours au top !',
+   '{"title":"La recette du super prompt","subtitle":"3 ingrédients = 1 réponse parfaite","steps":[{"num":1,"label":"🙋 Dis qui tu es","emoji":"🙋","example":"Je suis en CM1 / J''ai 9 ans / Je fais un exposé sur...","tip":"L''IA ne te connaît pas. Présente-toi en 1 phrase !"},{"num":2,"label":"🎯 Dis ce que tu veux","emoji":"🎯","example":"Explique-moi… / Aide-moi à… / Invente une…","tip":"Sois précis : quel sujet, quel problème ?"},{"num":3,"label":"🎨 Dis comment tu le veux","emoji":"🎨","example":"En 3 points simples / Avec un exemple rigolo / En moins de 5 phrases","tip":"Donne un format : court ou long, sérieux ou drôle, avec exemples ou pas."}],"example":{"label":"Exemple complet ✨","text":"Je suis en CE2. J''ai besoin de comprendre les volcans pour mon exposé. Explique-moi comment fonctionne un volcan en 3 étapes avec une comparaison rigolote."},"badge_hint":"Si tu maîtrises cette recette, tu débloques le badge Prompt Malin ! 🏆"}',
+   2, 15),
+  ('Améliore ces prompts pourris ! 🔧', 'editor', 10,
+   'Ces prompts sont trop flous. À toi de les transformer en super prompts en ajoutant les 3 ingrédients magiques !',
+   '{"task_intro":"Chaque prompt nul est suivi d''un espace pour l''améliorer. Rappelle-toi : qui tu es + ce que tu veux + comment tu le veux !","tasks":[{"id":"t1","emoji":"🦁","bad_prompt":"Parle-moi des lions","label":"Mission safari 🦁","placeholder":"Je suis en... j''ai besoin de savoir... Explique en...","tip":"Ajoute ton niveau, le détail exact sur les lions, et si tu veux des anecdotes rigolos !","min_length":30},{"id":"t2","emoji":"🌋","bad_prompt":"Qu''est-ce qu''un volcan ?","label":"Mission géologie 🌋","placeholder":"Je suis en... pour mon exposé sur... Explique-moi...","tip":"Dis pour quoi tu as besoin de cette info et comment tu veux qu''elle soit présentée.","min_length":30},{"id":"t3","emoji":"🎃","bad_prompt":"Invente une histoire","label":"Mission créativité 🎃","placeholder":"Invente une histoire courte et drôle avec... qui... mais...","tip":"Donne des personnages, une situation et un problème amusant !","min_length":30}],"success_message":"Bravo ! Tes prompts sont maintenant 100x plus puissants 💪"}',
+   3, 30),
+  ('Mon carnet de prompts 📓', 'editor', 8,
+   'Crée 2 vrais prompts pour tes devoirs de cette semaine. Utilise la recette magique !',
+   '{"intro":"Pense à tes vrais devoirs ou à quelque chose que tu veux apprendre cette semaine.","tasks":[{"id":"p1","label":"Devoir ou leçon de cette semaine 📚","placeholder":"Je suis en... Pour mon devoir sur... Aide-moi à... en...","min_length":25},{"id":"p2","label":"Quelque chose qui te rend curieux 🌟","placeholder":"Je veux comprendre... Explique-moi... avec des mots simples et...","min_length":25}],"tip":"Ces prompts, tu peux vraiment les utiliser ! Copie-les et essaie avec une vraie IA.","badge_hint":"Termine les 2 prompts pour débloquer le badge Prompt Malin ! 🤖"}',
+   4, 25),
   ('Exercice clavier', 'typing', 5,
-   'Tape cette phrase pour terminer.',
-   '{"text":"Plus ma question est claire, plus la réponse est utile.","target_wpm":18,"show_timer":false}',
-   4, 10)
+   'Tape la phrase secrète du prompt master pour finir la séance !',
+   '{"text":"Plus ma question est précise, plus la réponse est géniale !","target_wpm":18,"show_timer":false}',
+   5, 15)
 ) as act(title, type, dur, instr, content, ord, xp)
 on conflict do nothing;
 
